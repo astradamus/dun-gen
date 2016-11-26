@@ -11,4 +11,16 @@ public class Utils {
     public static int getArrayIndex(int x, int y, int height2d) {
         return x * height2d + y;
     }
+
+    public static void maybeWait(Object lock, long time) {
+        if (time > 0) {
+            try {
+                synchronized (lock) {
+                    lock.wait(time);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

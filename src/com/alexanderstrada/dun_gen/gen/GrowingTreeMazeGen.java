@@ -1,5 +1,6 @@
 package com.alexanderstrada.dun_gen.gen;
 
+import com.alexanderstrada.dun_gen.Utils;
 import com.alexanderstrada.dun_gen.map.Direction;
 import com.alexanderstrada.dun_gen.map.Map;
 import com.alexanderstrada.dun_gen.map.Vector;
@@ -63,7 +64,7 @@ public class GrowingTreeMazeGen implements Generator {
         // Carve until we run out of working points.
         while (!working.isEmpty()) {
 
-            maybeWait(updateDelay);
+            Utils.maybeWait(this, updateDelay);
 
             // Clear highlight.
             if (highlight != null) {
@@ -87,18 +88,6 @@ public class GrowingTreeMazeGen implements Generator {
             }
 
             listener.notifyVisualizerMapUpdated();
-        }
-    }
-
-    private void maybeWait(long updateDelay) {
-        if (updateDelay > 0) {
-            try {
-                synchronized (this) {
-                    wait(updateDelay);
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
     }
 
