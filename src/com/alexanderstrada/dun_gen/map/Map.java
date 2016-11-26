@@ -1,5 +1,8 @@
 package com.alexanderstrada.dun_gen.map;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Map {
 
     public static final int HIGHLIGHT_TILE = 0xFF0000;
@@ -27,5 +30,21 @@ public class Map {
 
     public int[] getTiles() {
         return tiles;
+    }
+
+    public static List<Vector> getOpenNeighbors(int width,
+                                                int height,
+                                                int[] tiles,
+                                                Vector origin,
+                                                List<Direction> directions) {
+
+        List<Vector> openNeighbors = new ArrayList<>();
+        for (Direction direction : directions) {
+            final Vector neighbor = origin.offsetBy(direction);
+            if (neighbor.isInBounds(width, height, 1) && tiles[neighbor.toArrayIndex(height)] != WALL_TILE) {
+                openNeighbors.add(neighbor);
+            }
+        }
+        return openNeighbors;
     }
 }
