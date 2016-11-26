@@ -8,14 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class GrowingTreeMazeGen implements com.alexanderstrada.dun_gen.gen.Generator {
+public class GrowingTreeMazeGen implements Generator {
 
     final Random random;
     final int boundary;
     final double turningResistance;
     final List<Vector> working = new ArrayList<>();
 
-    private com.alexanderstrada.dun_gen.gen.GenerationListener listener;
+    private GenerationListener listener;
     private int width;
     private int height;
     private int[] tiles;
@@ -29,7 +29,7 @@ public class GrowingTreeMazeGen implements com.alexanderstrada.dun_gen.gen.Gener
     }
 
     @Override
-    public void setGenerationListener(com.alexanderstrada.dun_gen.gen.GenerationListener listener) {
+    public void setGenerationListener(GenerationListener listener) {
         this.listener = listener;
     }
 
