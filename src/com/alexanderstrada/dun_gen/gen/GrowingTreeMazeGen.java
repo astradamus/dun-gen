@@ -114,7 +114,7 @@ public class GrowingTreeMazeGen implements Generator {
             }
 
             Vector origin = getCarveOrigin();
-            Vector target = getCarveTarget(origin);
+            Vector target = selectCarveTarget(origin);
 
             // If we found a suitable target, carve it.
             if (target != null) {
@@ -136,7 +136,7 @@ public class GrowingTreeMazeGen implements Generator {
         return working.get(working.size() - 1);
     }
 
-    private Vector getCarveTarget(Vector origin) {
+    private Vector selectCarveTarget(Vector origin) {
 
         // Check each cardinal neighbor (in random order) until a suitable target is found or all are checked.
         List<Direction> cardinals = Direction.getCardinals();
