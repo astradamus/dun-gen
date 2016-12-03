@@ -5,6 +5,7 @@ import java.util.Random;
 public class Utils {
 
     public static int randomIntInRange(Random random, int min, int max) {
+        if (min == max) return min;
         return min + random.nextInt(max-min);
     }
 
