@@ -133,13 +133,22 @@ public class GrowingTreeMazeGen implements Generator {
             return false;
         }
 
-        // Don't carve tiles with too many neighbors. Prevents creation of rooms/nodes.
-        if (Map.getOpenNeighbors(width, height, tiles, target, Direction.getAll()).size() > 2) {
+        List<Vector> openCards = Map.getOpenNeighbors(width, height, tiles, target, Direction.getCardinals());
+        List<Vector> openDiags = Map.getOpenNeighbors(width, height, tiles, target, Direction.getDiagonals());
+
+        int oc = openCards.size();
+        int od = openDiags.size();
+
+        boolean isIsolate = (oc == 0 && od == 0);
+        boolean isDeadEnd = (oc == 1 && od <= 1); // The <=1 instead of ==0 allows turning of corners and T-junctions,
+                                                  // but also results in most halls ending with little 'hooks'.
+
+        if (!isIsolate && !isDeadEnd) {
             return false;
         }
 
-        // Don't carve tiles that create diagonal connections.
-        for (Vector openDiag : Map.getOpenNeighbors(width, height, tiles, target, Direction.getDiagonals())) {
+        // Ensure we're not creating diagonal connections to other open spaces.
+        for (Vector openDiag : openDiags) {
             if (!openDiag.isCardinalAdjacent(origin)) {
                 return false;
             }
