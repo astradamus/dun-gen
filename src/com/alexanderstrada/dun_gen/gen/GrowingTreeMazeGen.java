@@ -16,6 +16,8 @@ public class GrowingTreeMazeGen implements Generator {
     final double turningResistance;
     final List<Vector> working = new ArrayList<>();
 
+    private boolean preserveHooks = false;
+
     private GenerationListener listener;
     private int width;
     private int height;
@@ -42,6 +44,45 @@ public class GrowingTreeMazeGen implements Generator {
 
         selectStartingPoint();
         carveMaze(updateDelay);
+
+        if (!preserveHooks) {
+            cullHooks(updateDelay);
+        }
+    }
+
+    public GrowingTreeMazeGen setPreserveHooks(boolean preserveHooks) {
+        this.preserveHooks = preserveHooks;
+        return this;
+    }
+
+    private void cullHooks(long updateDelay) {
+
+        List<Vector> hooks = new ArrayList<>();
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+
+                Vector v = new Vector(x, y);
+                boolean tileIsOpen = tiles[v.toArrayIndex(height)] != Map.WALL_TILE;
+
+                if (tileIsOpen) {
+                    List<Vector> openCards = Map.getOpenNeighbors(width, height, tiles, v, Direction.getCardinals());
+                    List<Vector> openDiags = Map.getOpenNeighbors(width, height, tiles, v, Direction.getDiagonals());
+
+                    boolean isHook = (openCards.size() == 1 && openDiags.size() == 1);
+
+                    if (isHook) {
+                        hooks.add(v);
+                    }
+                }
+            }
+        }
+
+        for (Vector hook : hooks) {
+            tiles[hook.toArrayIndex(height)] = Map.WALL_TILE;
+            Utils.maybeWait(this, updateDelay);
+            listener.notifyVisualizerMapUpdated();
+        }
     }
 
     private void selectStartingPoint() {
