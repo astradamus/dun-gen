@@ -62,6 +62,10 @@ public class GrowingTreeMaze implements Generator {
         return this;
     }
 
+    private void notifyListener() {
+        if (listener != null) listener.notifyVisualizerMapUpdated();
+    }
+
     private void cullHooks(long updateDelay) {
 
         List<Vector> hooks = new ArrayList<>();
@@ -88,7 +92,7 @@ public class GrowingTreeMaze implements Generator {
         for (Vector hook : hooks) {
             tiles[hook.toArrayIndex(height)] = Map.WALL_TILE;
             Utils.maybeWait(this, updateDelay);
-            listener.notifyVisualizerMapUpdated();
+            notifyListener();
         }
     }
 
@@ -106,7 +110,7 @@ public class GrowingTreeMaze implements Generator {
         }
         if (first != null) {
             carveTile(first);
-            listener.notifyVisualizerMapUpdated();
+            notifyListener();
         }
     }
 
@@ -144,7 +148,7 @@ public class GrowingTreeMaze implements Generator {
                 tiles[origin.toArrayIndex(height)] = Map.FINISHED_TILE;
             }
 
-            listener.notifyVisualizerMapUpdated();
+            notifyListener();
         }
     }
 
