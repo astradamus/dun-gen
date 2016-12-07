@@ -22,6 +22,10 @@ public class GrowingTreeMazeGen implements Generator {
     private int width;
     private int height;
     private int[] tiles;
+
+    private int startPointScanX = 0;
+    private int startPointScanY = 0;
+
     private Vector highlight;
     private Direction lastDirection = null;
 
@@ -42,8 +46,11 @@ public class GrowingTreeMazeGen implements Generator {
         height = map.getHeight();
         tiles = map.getTiles();
 
-        selectStartingPoint();
-        carveMaze(updateDelay);
+        do {
+            carveMaze(updateDelay);
+            Utils.maybeWait(this, updateDelay);
+            selectStartingPoint();
+        } while (!working.isEmpty());
 
         if (!preserveHooks) {
             cullHooks(updateDelay);
@@ -87,11 +94,20 @@ public class GrowingTreeMazeGen implements Generator {
 
     private void selectStartingPoint() {
         Vector first = null;
-        while (first == null || !isTargetValid(null, first)) {
-            first = Vector.getRandom(random, boundary, width - boundary, boundary, height - boundary);
+        xy: for (; startPointScanY < height; startPointScanY++) {
+            for (; startPointScanX < width; startPointScanX++) {
+                Vector candidate = new Vector(startPointScanX, startPointScanY);
+                if (isTargetValid(null, candidate)) {
+                    first = candidate;
+                    break xy;
+                }
+            }
+            startPointScanX = 0;
         }
-        carveTile(first);
-        listener.notifyVisualizerMapUpdated();
+        if (first != null) {
+            carveTile(first);
+            listener.notifyVisualizerMapUpdated();
+        }
     }
 
     private void carveTile(Vector first) {
