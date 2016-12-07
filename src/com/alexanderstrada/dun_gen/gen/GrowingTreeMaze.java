@@ -9,19 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class GrowingTreeMaze implements Generator {
+public class GrowingTreeMaze extends BasicGenerator {
 
-    final Random random;
-    final int boundary;
     final double turningResistance;
     final List<Vector> working = new ArrayList<>();
 
     private boolean preserveHooks = false;
-
-    private GenerationListener listener;
-    private int width;
-    private int height;
-    private int[] tiles;
 
     private int startPointScanX = 0;
     private int startPointScanY = 0;
@@ -29,22 +22,14 @@ public class GrowingTreeMaze implements Generator {
     private Vector highlight;
     private Direction lastDirection = null;
 
-    public GrowingTreeMaze(Random random, int edgeBoundary, double turningResistance) {
-        this.random = random;
-        this.boundary = edgeBoundary;
+    public GrowingTreeMaze(Random random, int boundary, double turningResistance) {
+        super(random, boundary);
         this.turningResistance = turningResistance;
     }
 
     @Override
-    public void setGenerationListener(GenerationListener listener) {
-        this.listener = listener;
-    }
-
-    @Override
     public void apply(Map map, long updateDelay) {
-        width = map.getWidth();
-        height = map.getHeight();
-        tiles = map.getTiles();
+        super.apply(map, updateDelay);
 
         do {
             carveMaze(updateDelay);
@@ -60,10 +45,6 @@ public class GrowingTreeMaze implements Generator {
     public GrowingTreeMaze setPreserveHooks(boolean preserveHooks) {
         this.preserveHooks = preserveHooks;
         return this;
-    }
-
-    private void notifyListener() {
-        if (listener != null) listener.notifyVisualizerMapUpdated();
     }
 
     private void cullHooks(long updateDelay) {
@@ -92,7 +73,7 @@ public class GrowingTreeMaze implements Generator {
         for (Vector hook : hooks) {
             tiles[hook.toArrayIndex(height)] = Map.WALL_TILE;
             Utils.maybeWait(this, updateDelay);
-            notifyListener();
+            notifyGenerationListener();
         }
     }
 
@@ -110,7 +91,7 @@ public class GrowingTreeMaze implements Generator {
         }
         if (first != null) {
             carveTile(first);
-            notifyListener();
+            notifyGenerationListener();
         }
     }
 
@@ -148,7 +129,7 @@ public class GrowingTreeMaze implements Generator {
                 tiles[origin.toArrayIndex(height)] = Map.FINISHED_TILE;
             }
 
-            notifyListener();
+            notifyGenerationListener();
         }
     }
 
