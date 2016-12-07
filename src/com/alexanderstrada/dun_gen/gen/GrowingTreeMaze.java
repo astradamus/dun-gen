@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class GrowingTreeMazeGen implements Generator {
+public class GrowingTreeMaze implements Generator {
 
     final Random random;
     final int boundary;
@@ -29,7 +29,7 @@ public class GrowingTreeMazeGen implements Generator {
     private Vector highlight;
     private Direction lastDirection = null;
 
-    public GrowingTreeMazeGen(Random random, int edgeBoundary, double turningResistance) {
+    public GrowingTreeMaze(Random random, int edgeBoundary, double turningResistance) {
         this.random = random;
         this.boundary = edgeBoundary;
         this.turningResistance = turningResistance;
@@ -57,7 +57,7 @@ public class GrowingTreeMazeGen implements Generator {
         }
     }
 
-    public GrowingTreeMazeGen setPreserveHooks(boolean preserveHooks) {
+    public GrowingTreeMaze setPreserveHooks(boolean preserveHooks) {
         this.preserveHooks = preserveHooks;
         return this;
     }
