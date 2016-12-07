@@ -50,7 +50,8 @@ public class GeneratorDemoPanel extends JPanel implements GenerationListener {
 
             for (int y = 0; y < map.getHeight(); y++) {
                 for (int x = 0; x < map.getWidth(); x++) {
-                    g.setColor(new Color(map.getTiles()[Utils.getArrayIndex(x, y, map.getHeight())]));
+                    int rgb = map.getTiles()[Utils.getArrayIndex(x, y, map.getHeight())];
+                    g.setColor(new Color(Math.abs(rgb)));
                     g.fillRect(x* squareSize, y* squareSize, squareSize, squareSize);
                 }
             }

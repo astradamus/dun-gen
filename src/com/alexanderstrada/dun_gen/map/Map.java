@@ -5,9 +5,9 @@ import java.util.List;
 
 public class Map {
 
-    public static final int HIGHLIGHT_TILE = 0xFF0000;
-    public static final int WORKING_TILE = 0xFFFFFF;
-    public static final int FINISHED_TILE = 0x333333;
+    public static final int HIGHLIGHT_TILE = -0xFF0000;
+    public static final int WORKING_TILE = -0xFFFFFF;
+    public static final int FINISHED_TILE = -0x333333;
     public static final int WALL_TILE = 0x000000;
 
     private final int width;
