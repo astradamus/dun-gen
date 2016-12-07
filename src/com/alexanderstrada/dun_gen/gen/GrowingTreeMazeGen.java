@@ -87,7 +87,7 @@ public class GrowingTreeMazeGen implements Generator {
 
     private void selectStartingPoint() {
         Vector first = null;
-        while (first == null || !isTargetValid(first, first)) {
+        while (first == null || !isTargetValid(null, first)) {
             first = Vector.getRandom(random, boundary, width - boundary, boundary, height - boundary);
         }
         carveTile(first);
@@ -183,6 +183,10 @@ public class GrowingTreeMazeGen implements Generator {
         boolean isIsolate = (oc == 0 && od == 0);
         boolean isDeadEnd = (oc == 1 && od <= 1); // The <=1 instead of ==0 allows turning of corners and T-junctions,
                                                   // but also results in most halls ending with little 'hooks'.
+
+        if (origin == null && !isIsolate) {
+            return false;
+        }
 
         if (!isIsolate && !isDeadEnd) {
             return false;
