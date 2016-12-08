@@ -1,7 +1,7 @@
 package com.alexanderstrada.dun_gen.demo;
 
 import com.alexanderstrada.dun_gen.gen.Generator;
-import com.alexanderstrada.dun_gen.gen.GrowingTreeMaze;
+import com.alexanderstrada.dun_gen.gen.maze.GrowingTreeMaze;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;

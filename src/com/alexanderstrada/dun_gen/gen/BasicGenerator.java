@@ -6,7 +6,7 @@ import java.util.Random;
 
 public abstract class BasicGenerator implements Generator {
 
-    final Random random;
+    protected final Random random;
 
     private GenerationListener listener;
     protected Map map;

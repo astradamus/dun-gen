@@ -1,6 +1,7 @@
-package com.alexanderstrada.dun_gen.gen;
+package com.alexanderstrada.dun_gen.gen.maze;
 
 import com.alexanderstrada.dun_gen.Utils;
+import com.alexanderstrada.dun_gen.gen.BasicGenerator;
 import com.alexanderstrada.dun_gen.map.Direction;
 import com.alexanderstrada.dun_gen.map.Map;
 import com.alexanderstrada.dun_gen.map.Vector;
