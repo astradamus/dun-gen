@@ -13,6 +13,7 @@ public class GrowingTreeMaze extends BasicGenerator {
 
     final double turningChance;
     final int minimumSpacing;
+    final int boundaryMultiplier;
     final List<Vector> working = new ArrayList<>();
 
     private boolean preserveHooks = false;
@@ -23,18 +24,21 @@ public class GrowingTreeMaze extends BasicGenerator {
     private Vector highlight;
     private Direction direction = null;
 
-    public GrowingTreeMaze(Random random, double turningChance, int minimumSpacing) {
+    public GrowingTreeMaze(Random random, double turningChance, int minimumSpacing, int boundaryMultiplier) {
         super(random);
 
         if (minimumSpacing < 2) throw new IllegalArgumentException("Minimum spacing must be >1.");
+        if (boundaryMultiplier < 1) throw new IllegalArgumentException("Minimum spacing must be >0.");
 
         this.turningChance = turningChance;
         this.minimumSpacing = minimumSpacing;
+        this.boundaryMultiplier = boundaryMultiplier;
     }
 
     @Override
     public void apply(Map map, long updateDelay) {
         super.apply(map, updateDelay);
+        boundary *= boundaryMultiplier;
 
         do {
             carveMaze(updateDelay);
