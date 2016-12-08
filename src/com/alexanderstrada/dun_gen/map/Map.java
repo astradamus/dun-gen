@@ -39,14 +39,25 @@ public class Map {
     }
 
     public List<Vector> getOpenNeighbors(Vector origin, List<Direction> directions) {
+        return getMatchingNeighbors(origin, directions, Map.WALL_TILE, false);
+    }
 
-        List<Vector> openNeighbors = new ArrayList<>();
+    public List<Vector> getMatchingNeighbors(Vector origin,
+                                             List<Direction> directions,
+                                             int valueToMatch,
+                                             boolean matchIfEquals) {
+
+        List<Vector> matches = new ArrayList<>();
         for (Direction direction : directions) {
             final Vector neighbor = origin.offsetBy(direction);
-            if (neighbor.isInBounds(width, height, boundary) && tiles[neighbor.toArrayIndex(height)] != WALL_TILE) {
-                openNeighbors.add(neighbor);
+            if (neighbor.isInBounds(width, height, boundary)) {
+
+                boolean matchesValue = tiles[neighbor.toArrayIndex(height)] == valueToMatch;
+                if (matchesValue == matchIfEquals) {
+                    matches.add(neighbor);
+                }
             }
         }
-        return openNeighbors;
+        return matches;
     }
 }
