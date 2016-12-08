@@ -29,6 +29,8 @@ public class Vector {
         return new Vector(getX() + oX, getY() + oY);
     }
 
+    public int distanceTo(Vector other) { return Utils.getDistance(x, y, other.x, other.y); }
+
     public int toArrayIndex(int mapHeight) {
         return Utils.getArrayIndex(getX(), getY(), mapHeight);
     }
