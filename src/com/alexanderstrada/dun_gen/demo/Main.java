@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class Main {
 
-    static int demoNumber = 4;
+    static int demoNumber = 0;
 
     public static void main(String[] args) {
 
@@ -23,30 +23,18 @@ public class Main {
 
         switch (demoNumber) {
             case 0:
-                squareSize = 64;
-                mapWidth = 13;
-                mapHeight = 13;
-                updateDelay = 500;
-                break;
-            case 1:
-                squareSize = 32;
-                mapWidth = 25;
-                mapHeight = 25;
-                updateDelay = 75;
-                break;
-            case 2:
                 squareSize = 10;
                 mapWidth = 75;
                 mapHeight = 75;
                 updateDelay = 8;
                 break;
-            case 3:
+            case 1:
                 squareSize = 2;
                 mapWidth = 400;
                 mapHeight = 400;
                 updateDelay = 1;
                 break;
-            case 4:
+            case 2:
                 squareSize = 1;
                 mapWidth = 1800;
                 mapHeight = 900;
