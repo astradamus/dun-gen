@@ -22,8 +22,8 @@ public class GrowingTreeMaze extends BasicGenerator {
     private Vector highlight;
     private Direction lastDirection = null;
 
-    public GrowingTreeMaze(Random random, int boundary, double turningResistance) {
-        super(random, boundary);
+    public GrowingTreeMaze(Random random, double turningResistance) {
+        super(random);
         this.turningResistance = turningResistance;
     }
 

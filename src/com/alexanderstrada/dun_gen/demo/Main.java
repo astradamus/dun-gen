@@ -57,7 +57,7 @@ public class Main {
 
         Random random = new Random();
         ArrayList<Generator> genSequence = new ArrayList<>();
-        genSequence.add(new GrowingTreeMaze(random, 1, 0.75));
+        genSequence.add(new GrowingTreeMaze(random, 0.75));
 
         JPanel panel = new GeneratorDemoPanel(genSequence, squareSize, mapWidth, mapHeight, updateDelay);
         runDemo(squareSize, mapWidth, mapHeight, panel);

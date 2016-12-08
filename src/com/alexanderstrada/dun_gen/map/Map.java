@@ -12,11 +12,13 @@ public class Map {
 
     private final int width;
     private final int height;
+    private final int boundary;
     private final int[] tiles;
 
-    public Map(int width, int height, int[] tiles) {
+    public Map(int width, int height, int boundary, int[] tiles) {
         this.width = width;
         this.height = height;
+        this.boundary = boundary;
         this.tiles = tiles;
     }
 
@@ -26,6 +28,10 @@ public class Map {
 
     public int getHeight() {
         return height;
+    }
+
+    public int getBoundary() {
+        return boundary;
     }
 
     public int[] getTiles() {

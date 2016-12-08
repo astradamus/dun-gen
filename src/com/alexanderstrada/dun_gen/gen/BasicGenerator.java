@@ -7,17 +7,15 @@ import java.util.Random;
 public abstract class BasicGenerator implements Generator {
 
     final Random random;
-    final int boundary;
 
     private GenerationListener listener;
     protected int width;
     protected int height;
+    protected int boundary;
     protected int[] tiles;
 
-    public BasicGenerator(Random random,
-                          int boundary) {
+    public BasicGenerator(Random random) {
         this.random = random;
-        this.boundary = boundary;
     }
 
     @Override
@@ -33,6 +31,7 @@ public abstract class BasicGenerator implements Generator {
     public void apply(Map map, long updateDelay) {
         width = map.getWidth();
         height = map.getHeight();
+        boundary = map.getBoundary();
         tiles = map.getTiles();
     }
 }

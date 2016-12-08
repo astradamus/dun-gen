@@ -23,7 +23,7 @@ public class GeneratorDemoPanel extends JPanel implements GenerationListener {
         this.squareSize = squareSize;
         setBackground(Color.BLACK);
 
-        map = new Map(mapWidth, mapHeight, new int[mapWidth*mapHeight]);
+        map = new Map(mapWidth, mapHeight, 1, new int[mapWidth*mapHeight]);
 
         new Thread(() -> {
 
