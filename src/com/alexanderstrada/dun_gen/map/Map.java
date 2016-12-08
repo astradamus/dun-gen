@@ -60,4 +60,38 @@ public class Map {
         }
         return matches;
     }
+
+    /**
+     * Returns a list of all in-bounds vectors in the given range that satisfy the given predicate. The predicate is
+     * defined as follows: if {@code matchIfEquals} is {@code true}, then a vector is included if the tile it represents
+     * is equal to {@code valueToMatch}; however, if {@code matchIfEquals} is {@code false}, then a vector is included
+     * if the tile it represents is NOT equal to {@code valueToMatch}.
+     */
+    public List<Vector> getMatchingOpenInRange(Vector origin,
+                                               int minDistance,
+                                               int maxDistance,
+                                               int valueToMatch,
+                                               boolean matchIfEquals) {
+
+        List<Vector> matchesInRange = new ArrayList<>();
+        for (int y = -maxDistance; y <= maxDistance; y++) {
+            for (int x = -maxDistance; x <= maxDistance; x++) {
+                final Vector candidate = origin.offsetBy(x, y);
+                if (candidate.distanceTo(origin) < minDistance) continue;
+
+                if (candidate.isInBounds(width, height, boundary)) {
+
+                    int tileValue = tiles[candidate.toArrayIndex(height)];
+                    if (tileValue != Map.WALL_TILE) {
+
+                        boolean matchesValue = tileValue == valueToMatch;
+                        if (matchesValue == matchIfEquals) {
+                            matchesInRange.add(candidate);
+                        }
+                    }
+                }
+            }
+        }
+        return matchesInRange;
+    }
 }
