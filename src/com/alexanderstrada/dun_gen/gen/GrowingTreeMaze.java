@@ -16,8 +16,6 @@ public class GrowingTreeMaze extends BasicGenerator {
     final int boundaryMultiplier;
     final List<Vector> working = new ArrayList<>();
 
-    private boolean preserveHooks = false;
-
     private int startPointScanX = 0;
     private int startPointScanY = 0;
 
@@ -46,46 +44,7 @@ public class GrowingTreeMaze extends BasicGenerator {
             selectStartingPoint();
         } while (!working.isEmpty());
 
-        if (!preserveHooks) {
-            cullHooks(updateDelay);
-        }
-
         finalizeTiles();
-    }
-
-    public GrowingTreeMaze setPreserveHooks(boolean preserveHooks) {
-        this.preserveHooks = preserveHooks;
-        return this;
-    }
-
-    private void cullHooks(long updateDelay) {
-
-        List<Vector> hooks = new ArrayList<>();
-
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-
-                Vector v = new Vector(x, y);
-                boolean tileIsOpen = tiles[v.toArrayIndex(height)] != Map.WALL_TILE;
-
-                if (tileIsOpen) {
-                    List<Vector> openCards = map.getOpenNeighbors(v, Direction.getCardinals());
-                    List<Vector> openDiags = map.getOpenNeighbors(v, Direction.getDiagonals());
-
-                    boolean isHook = (openCards.size() == 1 && openDiags.size() == 1);
-
-                    if (isHook) {
-                        hooks.add(v);
-                    }
-                }
-            }
-        }
-
-        for (Vector hook : hooks) {
-            tiles[hook.toArrayIndex(height)] = Map.WALL_TILE;
-            Utils.maybeWait(this, updateDelay);
-            notifyGenerationListener();
-        }
     }
 
     private void selectStartingPoint() {
