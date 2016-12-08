@@ -38,16 +38,12 @@ public class Map {
         return tiles;
     }
 
-    public static List<Vector> getOpenNeighbors(int width,
-                                                int height,
-                                                int[] tiles,
-                                                Vector origin,
-                                                List<Direction> directions) {
+    public List<Vector> getOpenNeighbors(Vector origin, List<Direction> directions) {
 
         List<Vector> openNeighbors = new ArrayList<>();
         for (Direction direction : directions) {
             final Vector neighbor = origin.offsetBy(direction);
-            if (neighbor.isInBounds(width, height, 1) && tiles[neighbor.toArrayIndex(height)] != WALL_TILE) {
+            if (neighbor.isInBounds(width, height, boundary) && tiles[neighbor.toArrayIndex(height)] != WALL_TILE) {
                 openNeighbors.add(neighbor);
             }
         }

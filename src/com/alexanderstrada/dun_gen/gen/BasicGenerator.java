@@ -9,6 +9,7 @@ public abstract class BasicGenerator implements Generator {
     final Random random;
 
     private GenerationListener listener;
+    protected Map map;
     protected int width;
     protected int height;
     protected int boundary;
@@ -29,6 +30,7 @@ public abstract class BasicGenerator implements Generator {
 
     @Override
     public void apply(Map map, long updateDelay) {
+        this.map = map;
         width = map.getWidth();
         height = map.getHeight();
         boundary = map.getBoundary();

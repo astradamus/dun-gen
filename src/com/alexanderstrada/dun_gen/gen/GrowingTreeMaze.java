@@ -58,8 +58,8 @@ public class GrowingTreeMaze extends BasicGenerator {
                 boolean tileIsOpen = tiles[v.toArrayIndex(height)] != Map.WALL_TILE;
 
                 if (tileIsOpen) {
-                    List<Vector> openCards = Map.getOpenNeighbors(width, height, tiles, v, Direction.getCardinals());
-                    List<Vector> openDiags = Map.getOpenNeighbors(width, height, tiles, v, Direction.getDiagonals());
+                    List<Vector> openCards = map.getOpenNeighbors(v, Direction.getCardinals());
+                    List<Vector> openDiags = map.getOpenNeighbors(v, Direction.getDiagonals());
 
                     boolean isHook = (openCards.size() == 1 && openDiags.size() == 1);
 
@@ -175,8 +175,8 @@ public class GrowingTreeMaze extends BasicGenerator {
             return false;
         }
 
-        List<Vector> openCards = Map.getOpenNeighbors(width, height, tiles, target, Direction.getCardinals());
-        List<Vector> openDiags = Map.getOpenNeighbors(width, height, tiles, target, Direction.getDiagonals());
+        List<Vector> openCards = map.getOpenNeighbors(target, Direction.getCardinals());
+        List<Vector> openDiags = map.getOpenNeighbors(target, Direction.getDiagonals());
 
         int oc = openCards.size();
         int od = openDiags.size();
