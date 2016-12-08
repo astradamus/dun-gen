@@ -11,26 +11,49 @@ import java.util.Random;
 
 public class GrowingTreeMaze extends BasicGenerator {
 
-    final double turningChance;
-    final int minimumSpacing;
-    final int boundaryMultiplier;
-    final List<Vector> working = new ArrayList<>();
+    private double turningChance;
+    private int minimumSpacing;
+    private int boundaryMultiplier;
 
+    private final List<Vector> working = new ArrayList<>();
     private int startPointScanX = 0;
     private int startPointScanY = 0;
-
     private Vector highlight;
     private Direction direction = null;
 
+    public GrowingTreeMaze(Random random) {
+        super(random);
+    }
+
     public GrowingTreeMaze(Random random, double turningChance, int minimumSpacing, int boundaryMultiplier) {
         super(random);
+        setTurningChance(turningChance);
+        setMinimumSpacing(minimumSpacing);
+        setBoundaryMultiplier(boundaryMultiplier);
+    }
 
-        if (minimumSpacing < 2) throw new IllegalArgumentException("Minimum spacing must be >1.");
-        if (boundaryMultiplier < 1) throw new IllegalArgumentException("Minimum spacing must be >0.");
+    public double getTurningChance() {
+        return turningChance;
+    }
 
-        this.turningChance = turningChance;
-        this.minimumSpacing = minimumSpacing;
-        this.boundaryMultiplier = boundaryMultiplier;
+    public void setTurningChance(double tc) {
+        turningChance = tc;
+    }
+
+    public int getMinimumSpacing() {
+        return minimumSpacing;
+    }
+
+    public void setMinimumSpacing(int ms) {
+        minimumSpacing = Math.max(2, ms);
+    }
+
+    public int getBoundaryMultiplier() {
+        return boundaryMultiplier;
+    }
+
+    public void setBoundaryMultiplier(int bm) {
+        boundaryMultiplier = Math.max(1, bm);
     }
 
     @Override
