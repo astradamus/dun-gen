@@ -11,7 +11,8 @@ import java.util.Random;
 
 public class GrowingTreeMaze extends BasicGenerator {
 
-    final double turningResistance;
+    final double turningChance;
+    final int minimumSpacing;
     final List<Vector> working = new ArrayList<>();
 
     private boolean preserveHooks = false;
@@ -20,11 +21,15 @@ public class GrowingTreeMaze extends BasicGenerator {
     private int startPointScanY = 0;
 
     private Vector highlight;
-    private Direction lastDirection = null;
+    private Direction direction = null;
 
-    public GrowingTreeMaze(Random random, double turningResistance) {
+    public GrowingTreeMaze(Random random, double turningChance, int minimumSpacing) {
         super(random);
-        this.turningResistance = turningResistance;
+
+        if (minimumSpacing < 2) throw new IllegalArgumentException("Minimum spacing must be >1.");
+
+        this.turningChance = turningChance;
+        this.minimumSpacing = minimumSpacing;
     }
 
     @Override
@@ -40,6 +45,8 @@ public class GrowingTreeMaze extends BasicGenerator {
         if (!preserveHooks) {
             cullHooks(updateDelay);
         }
+
+        finalizeTiles();
     }
 
     public GrowingTreeMaze setPreserveHooks(boolean preserveHooks) {
@@ -124,9 +131,9 @@ public class GrowingTreeMaze extends BasicGenerator {
 
             // If not, 'origin' is a dead end. Remove it from the working list.
             else {
-                lastDirection = null;
+                direction = null;
                 working.remove(origin);
-                tiles[origin.toArrayIndex(height)] = Map.FINISHED_TILE;
+                tiles[origin.toArrayIndex(height)] = Map.WORKED_TILE;
             }
 
             notifyGenerationListener();
@@ -143,21 +150,18 @@ public class GrowingTreeMaze extends BasicGenerator {
         List<Direction> cardinals = Direction.getCardinals();
         while (!cardinals.isEmpty()) {
 
-            Direction chosen;
-
-            // When carving continuously, avoid turning according to turningResistance.
-            if (lastDirection != null && random.nextDouble() < turningResistance) {
-                chosen = lastDirection;
-                lastDirection = null;
-            } else {
-                chosen = cardinals.remove(random.nextInt(cardinals.size()));
+            // When carving continuously, only turn according to turningChance.
+            if (direction == null || random.nextDouble() < turningChance) {
+                direction = cardinals.remove(random.nextInt(cardinals.size()));
             }
 
             // Select and validate the target chosen. If it's invalid, skip it.
-            Vector possibleTarget = origin.offsetBy(chosen);
-            if (!isTargetValid(origin, possibleTarget)) continue;
+            Vector possibleTarget = origin.offsetBy(direction);
+            if (!isTargetValid(origin, possibleTarget)) {
+                direction = null;
+                continue;
+            }
 
-            lastDirection = chosen;
             return possibleTarget;
         }
         return null;
@@ -173,6 +177,16 @@ public class GrowingTreeMaze extends BasicGenerator {
         // Don't carve tiles that are already open.
         if (tiles[target.toArrayIndex(height)] != Map.WALL_TILE) {
             return false;
+        }
+
+        if (direction != null) {
+            if (testForwardAndSides(target)) return false;
+        }
+        else {
+            List<Vector> openNearby = map.getMatchingOpenInRange(target, 2, minimumSpacing, Map.FINISHED_TILE, false);
+            if (openNearby.size() > 0) {
+                return false;
+            }
         }
 
         List<Vector> openCards = map.getOpenNeighbors(target, Direction.getCardinals());
@@ -200,5 +214,53 @@ public class GrowingTreeMaze extends BasicGenerator {
             }
         }
         return true;
+    }
+
+    private boolean testForwardAndSides(Vector target) {
+        // todo Try to rewrite this without instantiating so many vectors.
+        List<Vector> testOffsets = getTestOffsets(minimumSpacing);
+        for (Vector offset : testOffsets) {
+            Vector test = target.offsetBy(offset);
+            if (test.isInBounds(width, height, boundary)) {
+                int testValue = tiles[test.toArrayIndex(height)];
+                if (testValue == Map.WORKED_TILE || testValue == Map.WORKING_TILE) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private List<Vector> getTestOffsets(int dist) {
+        if (dist < 2) throw new IllegalArgumentException();
+
+        List<Vector> out = new ArrayList<>();
+
+        for (int i = 2; i <= dist; i++) {
+            Direction left = direction.leftCardinal();
+            Direction right = direction.rightCardinal();
+
+            Vector forward = new Vector(direction.offX * i, direction.offY * i);
+            Vector forward_left = forward.offsetBy(left);
+            Vector forward_right = forward.offsetBy(right);
+
+            Vector leftward = new Vector(left.offX * i, left.offY * i);
+            Vector rightward = new Vector(right.offX * i, right.offY * i);
+            out.add(forward);
+            out.add(forward_left);
+            out.add(forward_right);
+            out.add(leftward);
+            out.add(rightward);
+        }
+        return out;
+    }
+
+    private void finalizeTiles() {
+        for (int i = 0; i < tiles.length; i++) {
+            if (tiles[i] == Map.WORKED_TILE) {
+                tiles[i] = Map.FINISHED_TILE;
+            }
+        }
+        notifyGenerationListener();
     }
 }
