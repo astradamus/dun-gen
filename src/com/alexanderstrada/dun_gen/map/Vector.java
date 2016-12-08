@@ -21,6 +21,10 @@ public class Vector {
         return y;
     }
 
+    public Vector offsetBy(Vector other) {
+        return offsetBy(other.getX(), other.getY());
+    }
+
     public Vector offsetBy(Direction direction) {
         return offsetBy(direction.offX, direction.offY);
     }
