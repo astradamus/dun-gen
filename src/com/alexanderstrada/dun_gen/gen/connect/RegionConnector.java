@@ -6,7 +6,6 @@ import com.alexanderstrada.dun_gen.map.Direction;
 import com.alexanderstrada.dun_gen.map.Map;
 import com.alexanderstrada.dun_gen.map.Vector;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -24,7 +23,7 @@ public class RegionConnector extends RegionColorizer {
         super.apply(map, updateDelay);
 
         regions.clear();
-        collectRegions();
+        regions.putAll(map.getRegions());
 
         int repeats = 0;
         int lastSize = -1;
@@ -37,19 +36,6 @@ public class RegionConnector extends RegionColorizer {
                 lastSize = regions.size();
             }
             placeConnections(updateDelay);
-        }
-    }
-
-    private void collectRegions() {
-
-        for (int i = 0; i < tiles.length; i++) {
-            int identity = tiles[i];
-
-            if (!regions.containsKey(identity)) {
-                regions.put(identity, new ArrayList<>());
-            }
-
-            regions.get(identity).add(Utils.getVectorFromIndex(i, height));
         }
     }
 

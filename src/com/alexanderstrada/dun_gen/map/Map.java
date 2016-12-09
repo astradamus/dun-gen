@@ -1,6 +1,9 @@
 package com.alexanderstrada.dun_gen.map;
 
+import com.alexanderstrada.dun_gen.Utils;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Map {
@@ -37,6 +40,24 @@ public class Map {
 
     public int[] getTiles() {
         return tiles;
+    }
+
+    public java.util.Map<Integer, List<Vector>> getRegions() {
+
+        final java.util.Map<Integer, List<Vector>> out = new HashMap<>();
+
+        for (int i = 0; i < tiles.length; i++) {
+            int identity = tiles[i];
+            if (identity <= 0) continue;
+
+            if (!out.containsKey(identity)) {
+                out.put(identity, new ArrayList<>());
+            }
+
+            out.get(identity).add(Utils.getVectorFromIndex(i, height));
+        }
+
+        return out;
     }
 
     public List<Vector> getOpenNeighbors(Vector origin, List<Direction> directions) {
