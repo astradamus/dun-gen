@@ -2,6 +2,7 @@ package com.alexanderstrada.dun_gen.demo;
 
 import com.alexanderstrada.dun_gen.gen.Generator;
 import com.alexanderstrada.dun_gen.gen.maze.GrowingTreeMaze;
+import com.alexanderstrada.dun_gen.gen.room.ProportionalRooms;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -20,6 +21,8 @@ public class Main {
         int mapWidth;
         int mapHeight;
         int updateDelay;
+        int minRoomSize;
+        int maxRoomSize;
 
         switch (demoNumber) {
             case 0:
@@ -27,24 +30,31 @@ public class Main {
                 mapWidth = 75;
                 mapHeight = 75;
                 updateDelay = 8;
+                minRoomSize = 3;
+                maxRoomSize = 9;
                 break;
             case 1:
                 squareSize = 2;
                 mapWidth = 400;
                 mapHeight = 400;
                 updateDelay = 1;
+                minRoomSize = 5;
+                maxRoomSize = 15;
                 break;
             case 2:
                 squareSize = 1;
                 mapWidth = 1800;
                 mapHeight = 900;
                 updateDelay = 0;
+                minRoomSize = 9;
+                maxRoomSize = 21;
                 break;
             default: throw new IllegalArgumentException();
         }
 
         Random random = new Random();
         ArrayList<Generator> genSequence = new ArrayList<>();
+        genSequence.add(new ProportionalRooms(random, 0.25, minRoomSize, maxRoomSize, minRoomSize, maxRoomSize, false));
         genSequence.add(new GrowingTreeMaze(random, 0.05, 8, 5));
 
         JPanel panel = new GeneratorDemoPanel(genSequence, squareSize, mapWidth, mapHeight, updateDelay);
