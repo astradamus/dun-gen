@@ -1,5 +1,7 @@
 package com.alexanderstrada.dun_gen.map;
 
+import com.alexanderstrada.dun_gen.Utils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +23,10 @@ public enum Direction {
         this.id = id;
         this.offX = offX;
         this.offY = offY;
+    }
+
+    public int get2dIndexOffset(int height2d) {
+        return Utils.getArrayIndex(offX, offY, height2d);
     }
 
     public Direction left() {
