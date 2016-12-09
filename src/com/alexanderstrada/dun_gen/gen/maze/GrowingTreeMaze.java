@@ -14,7 +14,7 @@ public class GrowingTreeMaze extends BasicGenerator {
 
     private double turningChance;
     private int minimumSpacing;
-    private int boundaryMultiplier;
+    private int extraBoundary;
 
     private final List<Vector> working = new ArrayList<>();
     private int startPointScanX = 0;
@@ -26,11 +26,11 @@ public class GrowingTreeMaze extends BasicGenerator {
         super(random);
     }
 
-    public GrowingTreeMaze(Random random, double turningChance, int minimumSpacing, int boundaryMultiplier) {
+    public GrowingTreeMaze(Random random, double turningChance, int minimumSpacing, int extraBoundary) {
         super(random);
         setTurningChance(turningChance);
         setMinimumSpacing(minimumSpacing);
-        setBoundaryMultiplier(boundaryMultiplier);
+        setExtraBoundary(extraBoundary);
     }
 
     public double getTurningChance() {
@@ -49,18 +49,18 @@ public class GrowingTreeMaze extends BasicGenerator {
         minimumSpacing = Math.max(2, ms);
     }
 
-    public int getBoundaryMultiplier() {
-        return boundaryMultiplier;
+    public int getExtraBoundary() {
+        return extraBoundary;
     }
 
-    public void setBoundaryMultiplier(int bm) {
-        boundaryMultiplier = Math.max(1, bm);
+    public void setExtraBoundary(int bm) {
+        extraBoundary = Math.max(0, bm);
     }
 
     @Override
     public void apply(Map map, long updateDelay) {
         super.apply(map, updateDelay);
-        boundary *= boundaryMultiplier;
+        boundary += extraBoundary;
 
         do {
             carveMaze(updateDelay);
