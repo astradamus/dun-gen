@@ -53,6 +53,21 @@ public class Utils {
         return isInBounds(x, y, width, height, edgeBoundThickness);
     }
 
+    public static boolean isCardinalAdjacent(int xy1, int xy2, int height) {
+        int x1 = calcX(xy1, height);
+        int y1 = calcY(xy1, height);
+        int x2 = calcX(xy2, height);
+        int y2 = calcY(xy2, height);
+        return isCardinalAdjacent(x1, y1, x2, y2);
+    }
+
+    public static boolean isCardinalAdjacent(int x1, int y1, int x2, int y2) {
+        int dX = Math.abs(x2 - x1);
+        int dY = Math.abs(y2 - y1);
+
+        return (dX + dY == 1);
+    }
+
     private static int calcX(int i, int height2d) {
         return i / height2d;
     }

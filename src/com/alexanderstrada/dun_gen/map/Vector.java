@@ -44,10 +44,7 @@ public class Vector {
     }
 
     public boolean isCardinalAdjacent(Vector other) {
-        int dX = Math.abs(other.getX() - getX());
-        int dY = Math.abs(other.getY() - getY());
-
-        return (dX + dY == 1);
+        return Utils.isCardinalAdjacent(getX(), getY(), other.getX(), other.getY());
     }
 
     public boolean isInBounds(int width, int height, int edgeBoundThickness) {
