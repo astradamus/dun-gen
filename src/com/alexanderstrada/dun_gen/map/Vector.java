@@ -51,9 +51,7 @@ public class Vector {
     }
 
     public boolean isInBounds(int width, int height, int edgeBoundThickness) {
-        boolean xOk = getX() >= edgeBoundThickness && getX() < width - edgeBoundThickness;
-        boolean yOk = getY() >= edgeBoundThickness && getY() < height - edgeBoundThickness;
-        return xOk && yOk;
+        return Utils.isInBounds(getX(), getY(), width, height, edgeBoundThickness);
     }
 
     public static Vector getRandom(Random random, int xMin, int xMax, int yMin, int yMax) {

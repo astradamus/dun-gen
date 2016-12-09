@@ -40,4 +40,16 @@ public class Utils {
             }
         }
     }
+
+    public static boolean isInBounds(int x, int y, int width, int height, int edgeBoundThickness) {
+        boolean xOk = x >= edgeBoundThickness && x < width - edgeBoundThickness;
+        boolean yOk = y >= edgeBoundThickness && y < height - edgeBoundThickness;
+        return xOk && yOk;
+    }
+
+    public static boolean isInBounds(int i2d, int width, int height, int edgeBoundThickness) {
+        int x = i2d / height;
+        int y = i2d % height;
+        return isInBounds(x, y, width, height, edgeBoundThickness);
+    }
 }
