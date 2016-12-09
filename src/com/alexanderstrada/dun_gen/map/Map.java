@@ -60,6 +60,15 @@ public class Map {
         return out;
     }
 
+    public List<Integer> getOpenNeighbors(int origin2d, List<Direction> directions) {
+        List <Integer> out = new ArrayList<>();
+        List<Vector> openNeighbors = getOpenNeighbors(Utils.getVectorFromIndex(origin2d, height), directions);
+        for (Vector openNeighbor : openNeighbors) {
+            out.add(openNeighbor.toArrayIndex(height));
+        }
+        return out;
+    }
+
     public List<Vector> getOpenNeighbors(Vector origin, List<Direction> directions) {
         return getMatchingNeighbors(origin, directions, Map.WALL_TILE, false);
     }
@@ -81,6 +90,23 @@ public class Map {
             }
         }
         return matches;
+    }
+
+    public List<Integer> getMatchingOpenInRange(int origin2d,
+                                               int minDistance,
+                                               int maxDistance,
+                                               int valueToMatch,
+                                               boolean matchIfEquals) {
+        List<Integer> out = new ArrayList<>();
+        List<Vector> matchingOpenInRange = getMatchingOpenInRange(Utils.getVectorFromIndex(origin2d, height),
+                                                                  minDistance,
+                                                                  maxDistance,
+                                                                  valueToMatch,
+                                                                  matchIfEquals);
+        for (Vector vector : matchingOpenInRange) {
+            out.add(vector.toArrayIndex(height));
+        }
+        return out;
     }
 
     /**
