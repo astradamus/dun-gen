@@ -167,7 +167,7 @@ public class GrowingTreeMaze extends BasicGenerator {
         }
 
         if (direction != null) {
-            if (testForwardAndSides(target)) return false;
+            if (testForwardForSelf(target.toArrayIndex(height))) return false;
         }
         else {
             List<Vector> openNearby = map.getMatchingOpenInRange(target, 2, minimumSpacing, Map.FINISHED_TILE, false);
@@ -203,43 +203,44 @@ public class GrowingTreeMaze extends BasicGenerator {
         return true;
     }
 
-    private boolean testForwardAndSides(Vector target) {
-        // todo Try to rewrite this without instantiating so many vectors.
-        List<Vector> testOffsets = getTestOffsets(minimumSpacing);
-        for (Vector offset : testOffsets) {
-            Vector test = target.offsetBy(offset);
-            if (test.isInBounds(width, height, boundary)) {
-                int testValue = tiles[test.toArrayIndex(height)];
-                if (testValue == Map.WORKED_TILE || testValue == Map.WORKING_TILE) {
-                    return true;
-                }
-            }
+    private boolean testForwardForSelf(int target) {
+
+        Direction left = direction.leftCardinal();
+        Direction right = direction.rightCardinal();
+
+        int forwardOffI = direction.get2dIndexOffset(height);
+        int leftOffI = left.get2dIndexOffset(height);
+        int rightOffI = right.get2dIndexOffset(height);
+
+        for (int i = 2; i <= minimumSpacing; i++) {
+
+            int forward = target + (forwardOffI * i);
+            if (testIndexIsSelf(forward)) return true;
+
+            int forward_left = forward + leftOffI;
+            if (testIndexIsSelf(forward_left)) return true;
+
+            int forward_right = forward + rightOffI;
+            if (testIndexIsSelf(forward_right)) return true;
+
+            int leftward = target + (leftOffI * i);
+            if (testIndexIsSelf(leftward)) return true;
+
+            int rightward = target + (rightOffI * i);
+            if (testIndexIsSelf(rightward)) return true;
         }
+
         return false;
     }
 
-    private List<Vector> getTestOffsets(int dist) {
-        if (dist < 2) throw new IllegalArgumentException();
-
-        List<Vector> out = new ArrayList<>();
-
-        for (int i = 2; i <= dist; i++) {
-            Direction left = direction.leftCardinal();
-            Direction right = direction.rightCardinal();
-
-            Vector forward = new Vector(direction.offX * i, direction.offY * i);
-            Vector forward_left = forward.offsetBy(left);
-            Vector forward_right = forward.offsetBy(right);
-
-            Vector leftward = new Vector(left.offX * i, left.offY * i);
-            Vector rightward = new Vector(right.offX * i, right.offY * i);
-            out.add(forward);
-            out.add(forward_left);
-            out.add(forward_right);
-            out.add(leftward);
-            out.add(rightward);
+    private boolean testIndexIsSelf(int i) {
+        if (Utils.isInBounds(i, width, height, boundary)) {
+            int testValue = tiles[i];
+            if (testValue == Map.WORKED_TILE || testValue == Map.WORKING_TILE) {
+                return true;
+            }
         }
-        return out;
+        return false;
     }
 
     private void finalizeTiles() {
