@@ -3,6 +3,7 @@ package com.alexanderstrada.dun_gen.demo;
 import com.alexanderstrada.dun_gen.gen.Generator;
 import com.alexanderstrada.dun_gen.gen.connect.RegionConnector;
 import com.alexanderstrada.dun_gen.gen.maze.GrowingTreeMaze;
+import com.alexanderstrada.dun_gen.gen.process.SealDeadEnds;
 import com.alexanderstrada.dun_gen.gen.room.ProportionalRooms;
 
 import javax.swing.JFrame;
@@ -58,6 +59,7 @@ public class Main {
         genSequence.add(new ProportionalRooms(random, 0.25, minRoomSize, maxRoomSize, minRoomSize, maxRoomSize, false));
         genSequence.add(new GrowingTreeMaze(random, 0.05, 8, 5));
         genSequence.add(new RegionConnector(random));
+        genSequence.add(new SealDeadEnds(random));
 
         JPanel panel = new GeneratorDemoPanel(genSequence, squareSize, mapWidth, mapHeight, updateDelay);
         runDemo(squareSize, mapWidth, mapHeight, panel);
