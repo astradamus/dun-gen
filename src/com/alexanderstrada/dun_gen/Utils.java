@@ -23,8 +23,8 @@ public class Utils {
     }
 
     public static Vector getVectorFromIndex(int i, int height2d) {
-        int x = i / height2d;
-        int y = i % height2d;
+        int x = calcX(i, height2d);
+        int y = calcY(i, height2d);
 
         return new Vector(x, y);
     }
@@ -48,8 +48,16 @@ public class Utils {
     }
 
     public static boolean isInBounds(int i2d, int width, int height, int edgeBoundThickness) {
-        int x = i2d / height;
-        int y = i2d % height;
+        int x = calcX(i2d, height);
+        int y = calcY(i2d, height);
         return isInBounds(x, y, width, height, edgeBoundThickness);
+    }
+
+    private static int calcX(int i, int height2d) {
+        return i / height2d;
+    }
+
+    private static int calcY(int i, int height2d) {
+        return i % height2d;
     }
 }
