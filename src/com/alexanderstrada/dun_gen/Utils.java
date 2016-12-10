@@ -68,11 +68,11 @@ public class Utils {
         return (dX + dY == 1);
     }
 
-    private static int calcX(int i, int height2d) {
+    public static int calcX(int i, int height2d) {
         return i / height2d;
     }
 
-    private static int calcY(int i, int height2d) {
+    public static int calcY(int i, int height2d) {
         return i % height2d;
     }
 }
