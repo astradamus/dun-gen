@@ -3,7 +3,6 @@ package com.alexanderstrada.dun_gen.gen.process;
 import com.alexanderstrada.dun_gen.Utils;
 import com.alexanderstrada.dun_gen.gen.BasicGenerator;
 import com.alexanderstrada.dun_gen.map.Map;
-import com.alexanderstrada.dun_gen.map.Vector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +11,7 @@ import java.util.Random;
 
 public class SealSmallestRegions extends BasicGenerator {
 
-    private final java.util.Map<Integer, List<Vector>> regions = new HashMap<>();
+    private final java.util.Map<Integer, List<Integer>> regions = new HashMap<>();
 
     private final int maximumRegions;
 
@@ -26,16 +25,16 @@ public class SealSmallestRegions extends BasicGenerator {
         super.apply(map, updateDelay);
 
         regions.clear();
-        regions.putAll(map.getRegions());
+        regions.putAll(map.getRegions2dI());
 
-        List<java.util.Map.Entry<Integer, List<Vector>>> sortedEntries = getSortedEntries();
+        List<java.util.Map.Entry<Integer, List<Integer>>> sortedEntries = getSortedEntries();
 
         int keepCount = Math.min(maximumRegions, sortedEntries.size());
 
         for (int i = keepCount; i < sortedEntries.size(); i++) {
-            java.util.Map.Entry<Integer, List<Vector>> entry = sortedEntries.get(i);
-            for (Vector vector : entry.getValue()) {
-                tiles[vector.toArrayIndex(height)] = Map.WALL_TILE;
+            java.util.Map.Entry<Integer, List<Integer>> entry = sortedEntries.get(i);
+            for (int index : entry.getValue()) {
+                tiles[index] = Map.WALL_TILE;
                 notifyGenerationListener();
                 Utils.maybeWait(this, updateDelay);
             }
@@ -43,15 +42,15 @@ public class SealSmallestRegions extends BasicGenerator {
         }
     }
 
-    private List<java.util.Map.Entry<Integer, List<Vector>>> getSortedEntries() {
-        List<java.util.Map.Entry<Integer, List<Vector>>> sortedEntries = new ArrayList<>();
-        List<java.util.Map.Entry<Integer, List<Vector>>> unsortedEntries = new ArrayList<>(regions.entrySet());
+    private List<java.util.Map.Entry<Integer, List<Integer>>> getSortedEntries() {
+        List<java.util.Map.Entry<Integer, List<Integer>>> sortedEntries = new ArrayList<>();
+        List<java.util.Map.Entry<Integer, List<Integer>>> unsortedEntries = new ArrayList<>(regions.entrySet());
 
-        for (java.util.Map.Entry<Integer, List<Vector>> sorting : unsortedEntries) {
+        for (java.util.Map.Entry<Integer, List<Integer>> sorting : unsortedEntries) {
 
             boolean placed = false;
             for (int si = 0; si < sortedEntries.size(); si++) {
-                java.util.Map.Entry<Integer, List<Vector>> sorted = sortedEntries.get(si);
+                java.util.Map.Entry<Integer, List<Integer>> sorted = sortedEntries.get(si);
                 if (sorting.getValue().size() > sorted.getValue().size()) {
                     sortedEntries.add(si, sorting);
                     placed = true;
