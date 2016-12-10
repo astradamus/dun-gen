@@ -25,7 +25,7 @@ public class SealSmallestRegions extends BasicGenerator {
         super.apply(map, updateDelay);
 
         regions.clear();
-        regions.putAll(map.getRegions2dI());
+        regions.putAll(map.getRegions());
 
         List<java.util.Map.Entry<Integer, List<Integer>>> sortedEntries = getSortedEntries();
 

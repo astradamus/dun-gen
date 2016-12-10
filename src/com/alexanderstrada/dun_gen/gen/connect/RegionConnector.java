@@ -22,7 +22,7 @@ public class RegionConnector extends RegionColorizer {
         super.apply(map, updateDelay);
 
         regions.clear();
-        regions.putAll(map.getRegions2dI());
+        regions.putAll(map.getRegions());
 
         int repeats = 0;
         int lastSize = -1;

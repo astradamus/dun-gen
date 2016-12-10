@@ -42,26 +42,9 @@ public class Map {
         return tiles;
     }
 
-    public java.util.Map<Integer, List<Integer>> getRegions2dI() {
-        java.util.Map<Integer, List<Integer>> out = new HashMap<>();
+    public java.util.Map<Integer, List<Integer>> getRegions() {
 
-        java.util.Map<Integer, List<Vector>> regions = getRegions();
-
-        for (Integer id : regions.keySet()) {
-            List<Integer> ints = new ArrayList<>();
-            List<Vector> members = regions.get(id);
-            for (Vector member : members) {
-                ints.add(member.toArrayIndex(height));
-            }
-            out.put(id, ints);
-        }
-
-        return out;
-    }
-
-    public java.util.Map<Integer, List<Vector>> getRegions() {
-
-        final java.util.Map<Integer, List<Vector>> out = new HashMap<>();
+        final java.util.Map<Integer, List<Integer>> out = new HashMap<>();
 
         for (int i = 0; i < tiles.length; i++) {
             int identity = tiles[i];
@@ -71,7 +54,7 @@ public class Map {
                 out.put(identity, new ArrayList<>());
             }
 
-            out.get(identity).add(Utils.getVectorFromIndex(i, height));
+            out.get(identity).add(i);
         }
 
         return out;
