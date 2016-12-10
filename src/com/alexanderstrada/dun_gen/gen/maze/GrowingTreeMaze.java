@@ -198,29 +198,47 @@ public class GrowingTreeMaze extends BasicGenerator {
 
     private boolean testForwardForSelf(int target) {
 
-        Direction left = direction.leftCardinal();
-        Direction right = direction.rightCardinal();
+        int scanOrigin;
+        int scanWidth, scanHeight;
+        int xOff, yOff;
+        int ms = minimumSpacing;
 
-        int forwardOffI = direction.get2dIndexOffset(height);
-        int leftOffI = left.get2dIndexOffset(height);
-        int rightOffI = right.get2dIndexOffset(height);
+        switch (direction) {
+            case NORTH:
+                xOff = -ms;
+                yOff = -ms;
+                scanWidth = ms * 2;
+                scanHeight = ms;
+                break;
+            case EAST:
+                xOff = 0;
+                yOff = -ms;
+                scanWidth = ms;
+                scanHeight = ms * 2;
+                break;
+            case SOUTH:
+                xOff = -ms;
+                yOff = 0;
+                scanWidth = ms * 2;
+                scanHeight = ms;
+                break;
+            case WEST:
+                xOff = -ms;
+                yOff = -ms;
+                scanWidth = ms;
+                scanHeight = ms * 2;
+                break;
+            default:
+                throw new IllegalStateException();
+        }
 
-        for (int i = 2; i <= minimumSpacing; i++) {
+        scanOrigin = target + Utils.getArrayIndex(xOff, yOff, height);
 
-            int forward = target + (forwardOffI * i);
-            if (testIndexIsSelf(forward)) return true;
-
-            int forward_left = forward + leftOffI;
-            if (testIndexIsSelf(forward_left)) return true;
-
-            int forward_right = forward + rightOffI;
-            if (testIndexIsSelf(forward_right)) return true;
-
-            int leftward = target + (leftOffI * i);
-            if (testIndexIsSelf(leftward)) return true;
-
-            int rightward = target + (rightOffI * i);
-            if (testIndexIsSelf(rightward)) return true;
+        for (int y = 0; y < scanHeight; y++) {
+            for (int x = 0; x < scanWidth; x++) {
+                int off = Utils.getArrayIndex(x, y, height);
+                if (testIndexIsSelf(scanOrigin + off)) return true;
+            }
         }
 
         return false;
