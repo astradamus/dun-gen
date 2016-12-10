@@ -3,6 +3,7 @@ package com.alexanderstrada.dun_gen.demo;
 import com.alexanderstrada.dun_gen.Utils;
 import com.alexanderstrada.dun_gen.gen.GenerationListener;
 import com.alexanderstrada.dun_gen.gen.Generator;
+import com.alexanderstrada.dun_gen.map.DefaultMap;
 import com.alexanderstrada.dun_gen.map.Map;
 
 import javax.swing.JPanel;
@@ -26,7 +27,7 @@ public class GeneratorDemoPanel extends JPanel implements GenerationListener {
         this.squareSize = squareSize;
         setBackground(Color.BLACK);
 
-        map = new Map(mapWidth, mapHeight, 1, new int[mapWidth*mapHeight]);
+        map = new DefaultMap(mapWidth, mapHeight, 1, new int[mapWidth*mapHeight]);
 
         new Thread(() -> {
 

@@ -163,14 +163,15 @@ public class GrowingTreeMaze extends BasicGenerator {
             }
         }
         else {
-            List<Integer> openNearby = map.getMatchingOpenInRange(target, 2, minimumSpacing, Map.FINISHED_TILE, false);
+            List<Integer> openNearby =
+                    Utils.getMatchingOpenInRange(map, target, 2, minimumSpacing, Map.FINISHED_TILE, false);
             if (openNearby.size() > 1) {
                 return false;
             }
         }
 
-        List<Integer> openCards = map.getOpenNeighbors(target, Direction.getCardinals());
-        List<Integer> openDiags = map.getOpenNeighbors(target, Direction.getDiagonals());
+        List<Integer> openCards = Utils.getOpenNeighbors(map, target, Direction.getCardinals());
+        List<Integer> openDiags = Utils.getOpenNeighbors(map, target, Direction.getDiagonals());
 
         int oc = openCards.size();
         int od = openDiags.size();

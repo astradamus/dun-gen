@@ -22,7 +22,7 @@ public class RegionConnector extends RegionColorizer {
         super.apply(map, updateDelay);
 
         regions.clear();
-        regions.putAll(map.getRegions());
+        regions.putAll(Utils.getRegions(tiles));
 
         int repeats = 0;
         int lastSize = -1;
@@ -43,7 +43,7 @@ public class RegionConnector extends RegionColorizer {
 
             if (tiles[i] == Map.WALL_TILE) {
 
-                List<Integer> cardinalNeighbors = map.getOpenNeighbors(i, Direction.getCardinals());
+                List<Integer> cardinalNeighbors = Utils.getOpenNeighbors(map, i, Direction.getCardinals());
 
                 if (cardinalNeighbors.size() == 2) {
                     int neighbor1 = cardinalNeighbors.get(0);

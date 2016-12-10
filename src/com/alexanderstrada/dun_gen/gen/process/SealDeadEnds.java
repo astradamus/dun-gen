@@ -61,7 +61,7 @@ public class SealDeadEnds extends BasicGenerator {
 
     private void scanIndex(int i) {
         if (tiles[i] != Map.WALL_TILE) {
-            List<Integer> openNeighbors = map.getOpenNeighbors(i, Direction.getCardinals());
+            List<Integer> openNeighbors = Utils.getOpenNeighbors(map, i, Direction.getCardinals());
             if (openNeighbors.size() <= 1) {
                 deadEnds.add(i);
                 deadEndCandidates.addAll(openNeighbors);

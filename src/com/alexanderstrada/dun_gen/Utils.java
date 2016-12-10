@@ -1,5 +1,11 @@
 package com.alexanderstrada.dun_gen;
 
+import com.alexanderstrada.dun_gen.map.Direction;
+import com.alexanderstrada.dun_gen.map.Map;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 public class Utils {
@@ -73,5 +79,99 @@ public class Utils {
 
     public static int calcY(int i, int height2d) {
         return i % height2d;
+    }
+
+    public static java.util.Map<Integer, List<Integer>> getRegions(int[] tiles) {
+
+        final java.util.Map<Integer, List<Integer>> out = new HashMap<>();
+
+        for (int i = 0; i < tiles.length; i++) {
+            int identity = tiles[i];
+            if (identity <= 0) continue;
+
+            if (!out.containsKey(identity)) {
+                out.put(identity, new ArrayList<>());
+            }
+
+            out.get(identity).add(i);
+        }
+
+        return out;
+    }
+
+    public static List<Integer> getOpenNeighbors(Map map, int origin, List<Direction> directions) {
+        List<Integer> out = new ArrayList<>();
+        List<Integer> openNeighbors = getMatchingNeighbors(map, origin, directions, Map.WALL_TILE, false);
+        for (int openNeighbor : openNeighbors) {
+            out.add(openNeighbor);
+        }
+        return out;
+    }
+
+    public static List<Integer> getMatchingNeighbors(Map map,
+                                                     int origin,
+                                                     List<Direction> directions,
+                                                     int valueToMatch,
+                                                     boolean matchIfEquals) {
+
+        int w = map.getWidth();
+        int h = map.getHeight();
+        int bound = map.getBoundary();
+        int[] tiles = map.getTiles();
+
+        List<Integer> matches = new ArrayList<>();
+
+        for (Direction direction : directions) {
+
+            final int neighbor = origin + direction.get2dIndexOffset(h);
+
+            if (Utils.isInBounds(neighbor, w, h, bound)) {
+
+                boolean matchesValue = tiles[neighbor] == valueToMatch;
+                if (matchesValue == matchIfEquals) {
+                    matches.add(neighbor);
+                }
+            }
+        }
+        return matches;
+    }
+
+    /**
+     * Returns a list of all in-bounds indices in the given range that satisfy the given predicate. The predicate is
+     * defined as follows: if {@code matchIfEquals} is {@code true}, then an index is included if the tile it represents
+     * is equal to {@code valueToMatch}; however, if {@code matchIfEquals} is {@code false}, then an index is included
+     * if the tile it represents is NOT equal to {@code valueToMatch}.
+     */
+    public static List<Integer> getMatchingOpenInRange(Map map, int origin,
+                                                       int minDistance,
+                                                       int maxDistance,
+                                                       int valueToMatch,
+                                                       boolean matchIfEquals) {
+
+        int w = map.getWidth();
+        int h = map.getHeight();
+        int bound = map.getBoundary();
+        int[] tiles = map.getTiles();
+
+        List<Integer> matchesInRange = new ArrayList<>();
+        for (int y = -maxDistance; y <= maxDistance; y++) {
+            for (int x = -maxDistance; x <= maxDistance; x++) {
+                final int candidate = origin + Utils.getArrayIndex(x, y, h);
+                if (Utils.getDistance(candidate, origin, h) < minDistance) continue;
+
+                if (Utils.isInBounds(candidate, w, h, bound)) {
+
+                    int tileValue = tiles[candidate];
+                    if (tileValue != Map.WALL_TILE) {
+
+                        boolean matchesValue = tileValue == valueToMatch;
+                        if (matchesValue == matchIfEquals) {
+                            matchesInRange.add(candidate);
+                        }
+                    }
+                }
+            }
+        }
+        return matchesInRange;
     }
 }

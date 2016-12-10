@@ -31,7 +31,7 @@ public class RegionColorizer extends BasicGenerator {
                 while (!working.isEmpty()) {
                     int origin = working.remove(0);
 
-                    for (int neighbor : map.getOpenNeighbors(origin, Direction.getAll())) {
+                    for (int neighbor : Utils.getOpenNeighbors(map, origin, Direction.getAll())) {
                         if (tiles[neighbor] == Map.FINISHED_TILE) {
                             setMember(neighbor, i, updateDelay);
                         }
