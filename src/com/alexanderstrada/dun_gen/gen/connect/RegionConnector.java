@@ -4,7 +4,6 @@ import com.alexanderstrada.dun_gen.Utils;
 import com.alexanderstrada.dun_gen.gen.process.RegionColorizer;
 import com.alexanderstrada.dun_gen.map.Direction;
 import com.alexanderstrada.dun_gen.map.Map;
-import com.alexanderstrada.dun_gen.map.Vector;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +11,7 @@ import java.util.Random;
 
 public class RegionConnector extends RegionColorizer {
 
-    private final java.util.Map<Integer, List<Vector>> regions = new HashMap<>();
+    private final java.util.Map<Integer, List<Integer>> regions = new HashMap<>();
 
     public RegionConnector(Random random) {
         super(random);
@@ -23,7 +22,7 @@ public class RegionConnector extends RegionColorizer {
         super.apply(map, updateDelay);
 
         regions.clear();
-        regions.putAll(map.getRegions());
+        regions.putAll(map.getRegions2dI());
 
         int repeats = 0;
         int lastSize = -1;
@@ -41,25 +40,28 @@ public class RegionConnector extends RegionColorizer {
 
     private void placeConnections(long updateDelay) {
         for (int i = 0; i < tiles.length; i++) {
-            Vector v = Utils.getVectorFromIndex(i, height);
 
             if (tiles[i] == Map.WALL_TILE) {
 
-                List<Vector> openCards = map.getOpenNeighbors(v, Direction.getCardinals());
+                List<Integer> cardinalNeighbors = map.getOpenNeighbors(i, Direction.getCardinals());
 
-                if (openCards.size() == 2) {
+                if (cardinalNeighbors.size() == 2) {
+                    int neighbor1 = cardinalNeighbors.get(0);
+                    int n1x = Utils.calcX(neighbor1, height);
+                    int n1y = Utils.calcY(neighbor1, height);
 
-                    Vector c1 = openCards.get(0);
-                    Vector c2 = openCards.get(1);
+                    int neighbor2 = cardinalNeighbors.get(1);
+                    int n2x = Utils.calcX(neighbor2, height);
+                    int n2y = Utils.calcY(neighbor2, height);
 
                     // Only make connections at 180 degrees.
-                    if (c1.getX() == c2.getX() || c1.getY() == c2.getY()) {
+                    if (n1x == n2x || n1y == n2y) {
 
-                        int c1i = tiles[c1.toArrayIndex(height)];
-                        int c2i = tiles[c2.toArrayIndex(height)];
+                        int neighbor1Id = tiles[neighbor1];
+                        int neighbor2Id = tiles[neighbor2];
 
-                        if (c1i != c2i && random.nextDouble() < 0.10) {
-                            mergeRegions(v, c1i, c2i, updateDelay);
+                        if (neighbor1Id != neighbor2Id && random.nextDouble() < 0.10) {
+                            mergeRegions(i, neighbor1Id, neighbor2Id, updateDelay);
                         }
                     }
                 }
@@ -67,16 +69,21 @@ public class RegionConnector extends RegionColorizer {
         }
     }
 
-    private void mergeRegions(Vector connection, int regionToKeep, int regionToConsume, long updateDelay) {
-        List<Vector> keepMembers = regions.get(regionToKeep);
-        for (Vector member : regions.get(regionToConsume)) {
-            tiles[member.toArrayIndex(height)] = regionToKeep;
-            keepMembers.add(member);
-        }
-        regions.remove(regionToConsume);
+    private void mergeRegions(int connectionIndex, int keepRegionId, int consumeRegionId, long updateDelay) {
 
-        tiles[connection.toArrayIndex(height)] = regionToKeep;
-        keepMembers.add(connection);
+        List<Integer> keepMembers = regions.get(keepRegionId);
+
+        // Add the connection to the kept region.
+        tiles[connectionIndex] = keepRegionId;
+        keepMembers.add(connectionIndex);
+
+        // Add all consumed members to the kept region, update them on the map.
+        for (int consumeMember : regions.get(consumeRegionId)) {
+            tiles[consumeMember] = keepRegionId;
+            keepMembers.add(consumeMember);
+        }
+        regions.remove(consumeRegionId);
+
         notifyGenerationListener();
         Utils.maybeWait(this, updateDelay);
     }
