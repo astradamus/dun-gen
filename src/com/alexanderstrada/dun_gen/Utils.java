@@ -6,6 +6,14 @@ import java.util.Random;
 
 public class Utils {
 
+    public static int getDistance(int i1, int i2, int height2d) {
+        int x1 = calcX(i1, height2d);
+        int y1 = calcY(i1, height2d);
+        int x2 = calcX(i2, height2d);
+        int y2 = calcY(i2, height2d);
+        return getDistance(x1, y1, x2, y2);
+    }
+
     public static int getDistance(int x1, int y1, int x2, int y2) {
         int dX = Math.abs(x2-x1);
         int dY = Math.abs(y2-y1);
