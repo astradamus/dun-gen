@@ -3,7 +3,6 @@ package com.alexanderstrada.dun_gen.gen.room;
 import com.alexanderstrada.dun_gen.Utils;
 import com.alexanderstrada.dun_gen.gen.BasicGenerator;
 import com.alexanderstrada.dun_gen.map.Map;
-import com.alexanderstrada.dun_gen.map.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,11 +101,12 @@ public class ProportionalRooms extends BasicGenerator {
             int roomWidth = Utils.randomIntInRange(random, minRoomWidth, maxRoomWidth);
             int roomHeight = Utils.randomIntInRange(random, minRoomHeight, maxRoomHeight);
 
-            Vector origin = Vector.getRandom(random,
-                                             boundary, width - roomWidth - boundary,
-                                             boundary, height - roomHeight - boundary);
+            int originX = Utils.randomIntInRange(random, boundary, width - roomWidth - boundary);
+            int originY = Utils.randomIntInRange(random, boundary, height - roomHeight - boundary);
 
-            Room room = new Room(origin, roomWidth, roomHeight);
+            int originI = Utils.getArrayIndex(originX, originY, height);
+
+            Room room = new Room(originX, originY, roomWidth, roomHeight);
 
             if (!allowOverlap) {
                 for (Room compare : rooms) {
@@ -120,7 +120,8 @@ public class ProportionalRooms extends BasicGenerator {
             // Carve the room.
             for (int y = 0; y < roomHeight; y++) {
                 for (int x = 0; x < roomWidth; x++) {
-                    tiles[origin.offsetBy(x, y).toArrayIndex(height)] = Map.FINISHED_TILE;
+                    int off = Utils.getArrayIndex(x, y, height);
+                    tiles[originI + off] = Map.FINISHED_TILE;
                 }
             }
 
