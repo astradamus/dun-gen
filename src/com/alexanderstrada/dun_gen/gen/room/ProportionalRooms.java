@@ -2,7 +2,7 @@ package com.alexanderstrada.dun_gen.gen.room;
 
 import com.alexanderstrada.dun_gen.Utils;
 import com.alexanderstrada.dun_gen.gen.BasicGenerator;
-import com.alexanderstrada.dun_gen.map.Map;
+import com.alexanderstrada.dun_gen.tile_map.TileMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,8 +88,8 @@ public class ProportionalRooms extends BasicGenerator {
     }
 
     @Override
-    public void apply(Map map, long updateDelay) {
-        super.apply(map, updateDelay);
+    public void apply(TileMap tileMap, long updateDelay) {
+        super.apply(tileMap, updateDelay);
 
         rooms.clear();
 
@@ -121,7 +121,7 @@ public class ProportionalRooms extends BasicGenerator {
             for (int y = 0; y < roomHeight; y++) {
                 for (int x = 0; x < roomWidth; x++) {
                     int off = Utils.getArrayIndex(x, y, height);
-                    tiles[originI + off] = Map.FINISHED_TILE;
+                    tiles[originI + off] = TileMap.FINISHED_TILE;
                 }
             }
 

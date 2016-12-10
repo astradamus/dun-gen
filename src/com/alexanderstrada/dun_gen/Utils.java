@@ -1,7 +1,7 @@
 package com.alexanderstrada.dun_gen;
 
-import com.alexanderstrada.dun_gen.map.Direction;
-import com.alexanderstrada.dun_gen.map.Map;
+import com.alexanderstrada.dun_gen.tile_map.Direction;
+import com.alexanderstrada.dun_gen.tile_map.TileMap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -99,25 +99,25 @@ public class Utils {
         return out;
     }
 
-    public static List<Integer> getOpenNeighbors(Map map, int origin, List<Direction> directions) {
+    public static List<Integer> getOpenNeighbors(TileMap tileMap, int origin, List<Direction> directions) {
         List<Integer> out = new ArrayList<>();
-        List<Integer> openNeighbors = getMatchingNeighbors(map, origin, directions, Map.WALL_TILE, false);
+        List<Integer> openNeighbors = getMatchingNeighbors(tileMap, origin, directions, TileMap.WALL_TILE, false);
         for (int openNeighbor : openNeighbors) {
             out.add(openNeighbor);
         }
         return out;
     }
 
-    public static List<Integer> getMatchingNeighbors(Map map,
+    public static List<Integer> getMatchingNeighbors(TileMap tileMap,
                                                      int origin,
                                                      List<Direction> directions,
                                                      int valueToMatch,
                                                      boolean matchIfEquals) {
 
-        int w = map.getWidth();
-        int h = map.getHeight();
-        int bound = map.getBoundary();
-        int[] tiles = map.getTiles();
+        int w = tileMap.getWidth();
+        int h = tileMap.getHeight();
+        int bound = tileMap.getBoundary();
+        int[] tiles = tileMap.getTiles();
 
         List<Integer> matches = new ArrayList<>();
 
@@ -142,16 +142,16 @@ public class Utils {
      * is equal to {@code valueToMatch}; however, if {@code matchIfEquals} is {@code false}, then an index is included
      * if the tile it represents is NOT equal to {@code valueToMatch}.
      */
-    public static List<Integer> getMatchingOpenInRange(Map map, int origin,
+    public static List<Integer> getMatchingOpenInRange(TileMap tileMap, int origin,
                                                        int minDistance,
                                                        int maxDistance,
                                                        int valueToMatch,
                                                        boolean matchIfEquals) {
 
-        int w = map.getWidth();
-        int h = map.getHeight();
-        int bound = map.getBoundary();
-        int[] tiles = map.getTiles();
+        int w = tileMap.getWidth();
+        int h = tileMap.getHeight();
+        int bound = tileMap.getBoundary();
+        int[] tiles = tileMap.getTiles();
 
         List<Integer> matchesInRange = new ArrayList<>();
         for (int y = -maxDistance; y <= maxDistance; y++) {
@@ -162,7 +162,7 @@ public class Utils {
                 if (Utils.isInBounds(candidate, w, h, bound)) {
 
                     int tileValue = tiles[candidate];
-                    if (tileValue != Map.WALL_TILE) {
+                    if (tileValue != TileMap.WALL_TILE) {
 
                         boolean matchesValue = tileValue == valueToMatch;
                         if (matchesValue == matchIfEquals) {

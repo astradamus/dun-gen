@@ -1,6 +1,6 @@
 package com.alexanderstrada.dun_gen.gen;
 
-import com.alexanderstrada.dun_gen.map.Map;
+import com.alexanderstrada.dun_gen.tile_map.TileMap;
 
 import java.util.Random;
 
@@ -9,7 +9,7 @@ public abstract class BasicGenerator implements Generator {
     protected final Random random;
 
     private GenerationListener listener;
-    protected Map map;
+    protected TileMap tileMap;
     protected int width;
     protected int height;
     protected int boundary;
@@ -29,11 +29,11 @@ public abstract class BasicGenerator implements Generator {
     }
 
     @Override
-    public void apply(Map map, long updateDelay) {
-        this.map = map;
-        width = map.getWidth();
-        height = map.getHeight();
-        boundary = map.getBoundary();
-        tiles = map.getTiles();
+    public void apply(TileMap tileMap, long updateDelay) {
+        this.tileMap = tileMap;
+        width = tileMap.getWidth();
+        height = tileMap.getHeight();
+        boundary = tileMap.getBoundary();
+        tiles = tileMap.getTiles();
     }
 }

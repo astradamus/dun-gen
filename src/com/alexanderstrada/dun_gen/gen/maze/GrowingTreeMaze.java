@@ -2,8 +2,8 @@ package com.alexanderstrada.dun_gen.gen.maze;
 
 import com.alexanderstrada.dun_gen.Utils;
 import com.alexanderstrada.dun_gen.gen.BasicGenerator;
-import com.alexanderstrada.dun_gen.map.Direction;
-import com.alexanderstrada.dun_gen.map.Map;
+import com.alexanderstrada.dun_gen.tile_map.Direction;
+import com.alexanderstrada.dun_gen.tile_map.TileMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,8 +56,8 @@ public class GrowingTreeMaze extends BasicGenerator {
     }
 
     @Override
-    public void apply(Map map, long updateDelay) {
-        super.apply(map, updateDelay);
+    public void apply(TileMap tileMap, long updateDelay) {
+        super.apply(tileMap, updateDelay);
         boundary += extraBoundary;
 
         do {
@@ -85,7 +85,7 @@ public class GrowingTreeMaze extends BasicGenerator {
     }
 
     private void carveTile(int targetIndex) {
-        tiles[targetIndex] = Map.HIGHLIGHT_TILE;
+        tiles[targetIndex] = TileMap.HIGHLIGHT_TILE;
         working.add(targetIndex);
         highlightIndex = targetIndex;
     }
@@ -99,7 +99,7 @@ public class GrowingTreeMaze extends BasicGenerator {
 
             // Clear highlightIndex.
             if (highlightIndex >= 0) {
-                tiles[highlightIndex] = Map.WORKING_TILE;
+                tiles[highlightIndex] = TileMap.WORKING_TILE;
                 highlightIndex = -1;
             }
 
@@ -115,7 +115,7 @@ public class GrowingTreeMaze extends BasicGenerator {
             else {
                 direction = null;
                 working.remove(origin);
-                tiles[origin] = Map.WORKED_TILE;
+                tiles[origin] = TileMap.WORKED_TILE;
             }
 
             notifyGenerationListener();
@@ -153,7 +153,7 @@ public class GrowingTreeMaze extends BasicGenerator {
         }
 
         // Don't carve tiles that are already open.
-        if (tiles[target] != Map.WALL_TILE) {
+        if (tiles[target] != TileMap.WALL_TILE) {
             return false;
         }
 
@@ -164,14 +164,14 @@ public class GrowingTreeMaze extends BasicGenerator {
         }
         else {
             List<Integer> openNearby =
-                    Utils.getMatchingOpenInRange(map, target, 2, minimumSpacing, Map.FINISHED_TILE, false);
+                    Utils.getMatchingOpenInRange(tileMap, target, 2, minimumSpacing, TileMap.FINISHED_TILE, false);
             if (openNearby.size() > 1) {
                 return false;
             }
         }
 
-        List<Integer> openCards = Utils.getOpenNeighbors(map, target, Direction.getCardinals());
-        List<Integer> openDiags = Utils.getOpenNeighbors(map, target, Direction.getDiagonals());
+        List<Integer> openCards = Utils.getOpenNeighbors(tileMap, target, Direction.getCardinals());
+        List<Integer> openDiags = Utils.getOpenNeighbors(tileMap, target, Direction.getDiagonals());
 
         int oc = openCards.size();
         int od = openDiags.size();
@@ -248,7 +248,7 @@ public class GrowingTreeMaze extends BasicGenerator {
     private boolean testIndexIsSelf(int i) {
         if (Utils.isInBounds(i, width, height, boundary)) {
             int testValue = tiles[i];
-            if (testValue == Map.WORKED_TILE || testValue == Map.WORKING_TILE) {
+            if (testValue == TileMap.WORKED_TILE || testValue == TileMap.WORKING_TILE) {
                 return true;
             }
         }
@@ -257,8 +257,8 @@ public class GrowingTreeMaze extends BasicGenerator {
 
     private void finalizeTiles() {
         for (int i = 0; i < tiles.length; i++) {
-            if (tiles[i] == Map.WORKED_TILE) {
-                tiles[i] = Map.FINISHED_TILE;
+            if (tiles[i] == TileMap.WORKED_TILE) {
+                tiles[i] = TileMap.FINISHED_TILE;
             }
         }
         notifyGenerationListener();

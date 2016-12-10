@@ -2,8 +2,8 @@ package com.alexanderstrada.dun_gen.gen.process;
 
 import com.alexanderstrada.dun_gen.Utils;
 import com.alexanderstrada.dun_gen.gen.BasicGenerator;
-import com.alexanderstrada.dun_gen.map.Direction;
-import com.alexanderstrada.dun_gen.map.Map;
+import com.alexanderstrada.dun_gen.tile_map.Direction;
+import com.alexanderstrada.dun_gen.tile_map.TileMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +18,12 @@ public class RegionColorizer extends BasicGenerator {
     }
 
     @Override
-    public void apply(Map map, long updateDelay) {
-        super.apply(map, updateDelay);
+    public void apply(TileMap tileMap, long updateDelay) {
+        super.apply(tileMap, updateDelay);
 
         for (int i = 0; i < tiles.length; i++) {
 
-            if (tiles[i] == Map.FINISHED_TILE) {
+            if (tiles[i] == TileMap.FINISHED_TILE) {
                 working.clear();
 
                 setMember(i, i, updateDelay);
@@ -31,8 +31,8 @@ public class RegionColorizer extends BasicGenerator {
                 while (!working.isEmpty()) {
                     int origin = working.remove(0);
 
-                    for (int neighbor : Utils.getOpenNeighbors(map, origin, Direction.getAll())) {
-                        if (tiles[neighbor] == Map.FINISHED_TILE) {
+                    for (int neighbor : Utils.getOpenNeighbors(tileMap, origin, Direction.getAll())) {
+                        if (tiles[neighbor] == TileMap.FINISHED_TILE) {
                             setMember(neighbor, i, updateDelay);
                         }
                     }

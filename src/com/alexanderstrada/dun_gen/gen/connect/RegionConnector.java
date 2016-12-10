@@ -2,8 +2,8 @@ package com.alexanderstrada.dun_gen.gen.connect;
 
 import com.alexanderstrada.dun_gen.Utils;
 import com.alexanderstrada.dun_gen.gen.process.RegionColorizer;
-import com.alexanderstrada.dun_gen.map.Direction;
-import com.alexanderstrada.dun_gen.map.Map;
+import com.alexanderstrada.dun_gen.tile_map.Direction;
+import com.alexanderstrada.dun_gen.tile_map.TileMap;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,8 +18,8 @@ public class RegionConnector extends RegionColorizer {
     }
 
     @Override
-    public void apply(Map map, long updateDelay) {
-        super.apply(map, updateDelay);
+    public void apply(TileMap tileMap, long updateDelay) {
+        super.apply(tileMap, updateDelay);
 
         regions.clear();
         regions.putAll(Utils.getRegions(tiles));
@@ -41,9 +41,9 @@ public class RegionConnector extends RegionColorizer {
     private void placeConnections(long updateDelay) {
         for (int i = 0; i < tiles.length; i++) {
 
-            if (tiles[i] == Map.WALL_TILE) {
+            if (tiles[i] == TileMap.WALL_TILE) {
 
-                List<Integer> cardinalNeighbors = Utils.getOpenNeighbors(map, i, Direction.getCardinals());
+                List<Integer> cardinalNeighbors = Utils.getOpenNeighbors(tileMap, i, Direction.getCardinals());
 
                 if (cardinalNeighbors.size() == 2) {
                     int neighbor1 = cardinalNeighbors.get(0);
@@ -77,7 +77,7 @@ public class RegionConnector extends RegionColorizer {
         tiles[connectionIndex] = keepRegionId;
         keepMembers.add(connectionIndex);
 
-        // Add all consumed members to the kept region, update them on the map.
+        // Add all consumed members to the kept region, update them on the tileMap.
         for (int consumeMember : regions.get(consumeRegionId)) {
             tiles[consumeMember] = keepRegionId;
             keepMembers.add(consumeMember);

@@ -2,8 +2,8 @@ package com.alexanderstrada.dun_gen.gen.process;
 
 import com.alexanderstrada.dun_gen.Utils;
 import com.alexanderstrada.dun_gen.gen.BasicGenerator;
-import com.alexanderstrada.dun_gen.map.Direction;
-import com.alexanderstrada.dun_gen.map.Map;
+import com.alexanderstrada.dun_gen.tile_map.Direction;
+import com.alexanderstrada.dun_gen.tile_map.TileMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +20,8 @@ public class SealDeadEnds extends BasicGenerator {
     }
 
     @Override
-    public void apply(Map map, long updateDelay) {
-        super.apply(map, updateDelay);
+    public void apply(TileMap tileMap, long updateDelay) {
+        super.apply(tileMap, updateDelay);
 
         while (true) {
             if (deadEnds.isEmpty()) {
@@ -52,7 +52,7 @@ public class SealDeadEnds extends BasicGenerator {
 
     private void sealDeadEnds(long updateDelay) {
         for (int i : deadEnds) {
-            tiles[i] = Map.WALL_TILE;
+            tiles[i] = TileMap.WALL_TILE;
             notifyGenerationListener();
             Utils.maybeWait(this, updateDelay);
         }
@@ -60,8 +60,8 @@ public class SealDeadEnds extends BasicGenerator {
     }
 
     private void scanIndex(int i) {
-        if (tiles[i] != Map.WALL_TILE) {
-            List<Integer> openNeighbors = Utils.getOpenNeighbors(map, i, Direction.getCardinals());
+        if (tiles[i] != TileMap.WALL_TILE) {
+            List<Integer> openNeighbors = Utils.getOpenNeighbors(tileMap, i, Direction.getCardinals());
             if (openNeighbors.size() <= 1) {
                 deadEnds.add(i);
                 deadEndCandidates.addAll(openNeighbors);

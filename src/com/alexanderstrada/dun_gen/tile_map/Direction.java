@@ -1,4 +1,4 @@
-package com.alexanderstrada.dun_gen.map;
+package com.alexanderstrada.dun_gen.tile_map;
 
 import com.alexanderstrada.dun_gen.Utils;
 

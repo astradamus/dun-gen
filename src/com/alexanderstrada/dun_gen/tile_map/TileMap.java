@@ -1,6 +1,6 @@
-package com.alexanderstrada.dun_gen.map;
+package com.alexanderstrada.dun_gen.tile_map;
 
-public interface Map {
+public interface TileMap {
     int HIGHLIGHT_TILE = -0xFF0000;
     int WORKING_TILE = -0xFFFFFF;
     int WORKED_TILE = -0x666666;

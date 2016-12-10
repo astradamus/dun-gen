@@ -1,13 +1,13 @@
-package com.alexanderstrada.dun_gen.map;
+package com.alexanderstrada.dun_gen.tile_map;
 
-public class DefaultMap implements Map {
+public class DefaultTileMap implements TileMap {
 
     private final int width;
     private final int height;
     private final int boundary;
     private final int[] tiles;
 
-    public DefaultMap(int width, int height, int boundary, int[] tiles) {
+    public DefaultTileMap(int width, int height, int boundary, int[] tiles) {
         this.width = width;
         this.height = height;
         this.boundary = boundary;

@@ -2,7 +2,7 @@ package com.alexanderstrada.dun_gen.gen.process;
 
 import com.alexanderstrada.dun_gen.Utils;
 import com.alexanderstrada.dun_gen.gen.BasicGenerator;
-import com.alexanderstrada.dun_gen.map.Map;
+import com.alexanderstrada.dun_gen.tile_map.TileMap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,8 +21,8 @@ public class SealSmallestRegions extends BasicGenerator {
     }
 
     @Override
-    public void apply(Map map, long updateDelay) {
-        super.apply(map, updateDelay);
+    public void apply(TileMap tileMap, long updateDelay) {
+        super.apply(tileMap, updateDelay);
 
         regions.clear();
         regions.putAll(Utils.getRegions(tiles));
@@ -34,7 +34,7 @@ public class SealSmallestRegions extends BasicGenerator {
         for (int i = keepCount; i < sortedEntries.size(); i++) {
             java.util.Map.Entry<Integer, List<Integer>> entry = sortedEntries.get(i);
             for (int index : entry.getValue()) {
-                tiles[index] = Map.WALL_TILE;
+                tiles[index] = TileMap.WALL_TILE;
                 notifyGenerationListener();
                 Utils.maybeWait(this, updateDelay);
             }
