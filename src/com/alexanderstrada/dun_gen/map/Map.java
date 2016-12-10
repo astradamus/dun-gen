@@ -62,28 +62,24 @@ public class Map {
 
     public List<Integer> getOpenNeighbors(int origin2d, List<Direction> directions) {
         List <Integer> out = new ArrayList<>();
-        List<Vector> openNeighbors = getOpenNeighbors(Utils.getVectorFromIndex(origin2d, height), directions);
-        for (Vector openNeighbor : openNeighbors) {
-            out.add(openNeighbor.toArrayIndex(height));
+        List<Integer> openNeighbors = getMatchingNeighbors(origin2d, directions, Map.WALL_TILE, false);
+        for (int openNeighbor : openNeighbors) {
+            out.add(openNeighbor);
         }
         return out;
     }
 
-    public List<Vector> getOpenNeighbors(Vector origin, List<Direction> directions) {
-        return getMatchingNeighbors(origin, directions, Map.WALL_TILE, false);
-    }
+    public List<Integer> getMatchingNeighbors(int origin,
+                                              List<Direction> directions,
+                                              int valueToMatch,
+                                              boolean matchIfEquals) {
 
-    public List<Vector> getMatchingNeighbors(Vector origin,
-                                             List<Direction> directions,
-                                             int valueToMatch,
-                                             boolean matchIfEquals) {
-
-        List<Vector> matches = new ArrayList<>();
+        List<Integer> matches = new ArrayList<>();
         for (Direction direction : directions) {
-            final Vector neighbor = origin.offsetBy(direction);
-            if (neighbor.isInBounds(width, height, boundary)) {
+            final int neighbor = origin + (direction.get2dIndexOffset(height));
+            if (Utils.isInBounds(neighbor, width, height, boundary)) {
 
-                boolean matchesValue = tiles[neighbor.toArrayIndex(height)] == valueToMatch;
+                boolean matchesValue = tiles[neighbor] == valueToMatch;
                 if (matchesValue == matchIfEquals) {
                     matches.add(neighbor);
                 }
@@ -92,44 +88,27 @@ public class Map {
         return matches;
     }
 
-    public List<Integer> getMatchingOpenInRange(int origin2d,
-                                               int minDistance,
-                                               int maxDistance,
-                                               int valueToMatch,
-                                               boolean matchIfEquals) {
-        List<Integer> out = new ArrayList<>();
-        List<Vector> matchingOpenInRange = getMatchingOpenInRange(Utils.getVectorFromIndex(origin2d, height),
-                                                                  minDistance,
-                                                                  maxDistance,
-                                                                  valueToMatch,
-                                                                  matchIfEquals);
-        for (Vector vector : matchingOpenInRange) {
-            out.add(vector.toArrayIndex(height));
-        }
-        return out;
-    }
-
     /**
-     * Returns a list of all in-bounds vectors in the given range that satisfy the given predicate. The predicate is
-     * defined as follows: if {@code matchIfEquals} is {@code true}, then a vector is included if the tile it represents
-     * is equal to {@code valueToMatch}; however, if {@code matchIfEquals} is {@code false}, then a vector is included
+     * Returns a list of all in-bounds indices in the given range that satisfy the given predicate. The predicate is
+     * defined as follows: if {@code matchIfEquals} is {@code true}, then an index is included if the tile it represents
+     * is equal to {@code valueToMatch}; however, if {@code matchIfEquals} is {@code false}, then an index is included
      * if the tile it represents is NOT equal to {@code valueToMatch}.
      */
-    public List<Vector> getMatchingOpenInRange(Vector origin,
-                                               int minDistance,
-                                               int maxDistance,
-                                               int valueToMatch,
-                                               boolean matchIfEquals) {
+    public List<Integer> getMatchingOpenInRange(int origin,
+                                                int minDistance,
+                                                int maxDistance,
+                                                int valueToMatch,
+                                                boolean matchIfEquals) {
 
-        List<Vector> matchesInRange = new ArrayList<>();
+        List<Integer> matchesInRange = new ArrayList<>();
         for (int y = -maxDistance; y <= maxDistance; y++) {
             for (int x = -maxDistance; x <= maxDistance; x++) {
-                final Vector candidate = origin.offsetBy(x, y);
-                if (candidate.distanceTo(origin) < minDistance) continue;
+                final int candidate = origin + Utils.getArrayIndex(x, y, height);
+                if (Utils.getDistance(candidate, origin, height) < minDistance) continue;
 
-                if (candidate.isInBounds(width, height, boundary)) {
+                if (Utils.isInBounds(candidate, width, height, boundary)) {
 
-                    int tileValue = tiles[candidate.toArrayIndex(height)];
+                    int tileValue = tiles[candidate];
                     if (tileValue != Map.WALL_TILE) {
 
                         boolean matchesValue = tileValue == valueToMatch;
