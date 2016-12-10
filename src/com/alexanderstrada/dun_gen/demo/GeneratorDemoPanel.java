@@ -8,9 +8,12 @@ import com.alexanderstrada.dun_gen.map.Map;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.HashMap;
 import java.util.List;
 
 public class GeneratorDemoPanel extends JPanel implements GenerationListener {
+
+    private final java.util.Map<Integer, Color> colorCache = new HashMap<>();
 
     private int squareSize;
     private Map map;
@@ -50,8 +53,16 @@ public class GeneratorDemoPanel extends JPanel implements GenerationListener {
 
             for (int y = 0; y < map.getHeight(); y++) {
                 for (int x = 0; x < map.getWidth(); x++) {
-                    int rgb = map.getTiles()[Utils.getArrayIndex(x, y, map.getHeight())];
-                    g.setColor(new Color(Math.abs(rgb)));
+                    int value = map.getTiles()[Utils.getArrayIndex(x, y, map.getHeight())];
+                    int rgb = Math.abs(value);
+
+                    Color color = colorCache.get(rgb);
+                    if (color == null) {
+                        color = new Color(rgb);
+                        colorCache.put(rgb, color);
+                    }
+
+                    g.setColor(color);
                     g.fillRect(x* squareSize, y* squareSize, squareSize, squareSize);
                 }
             }
