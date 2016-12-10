@@ -4,7 +4,6 @@ import com.alexanderstrada.dun_gen.Utils;
 import com.alexanderstrada.dun_gen.gen.BasicGenerator;
 import com.alexanderstrada.dun_gen.map.Direction;
 import com.alexanderstrada.dun_gen.map.Map;
-import com.alexanderstrada.dun_gen.map.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +15,9 @@ public class GrowingTreeMaze extends BasicGenerator {
     private int minimumSpacing;
     private int extraBoundary;
 
-    private final List<Vector> working = new ArrayList<>();
-    private int startPointScanX = 0;
-    private int startPointScanY = 0;
-    private Vector highlight;
+    private final List<Integer> working = new ArrayList<>();
+    private int startPointScan = 0;
+    private int highlightIndex;
     private Direction direction = null;
 
     public GrowingTreeMaze(Random random) {
@@ -72,27 +70,24 @@ public class GrowingTreeMaze extends BasicGenerator {
     }
 
     private void selectStartingPoint() {
-        Vector first = null;
-        xy: for (; startPointScanY < height; startPointScanY++) {
-            for (; startPointScanX < width; startPointScanX++) {
-                Vector candidate = new Vector(startPointScanX, startPointScanY);
-                if (isTargetValid(null, candidate)) {
-                    first = candidate;
-                    break xy;
-                }
+        int first = -1;
+        for (; startPointScan < tiles.length; startPointScan++) {
+            if (isTargetValid(-1, startPointScan)) {
+                first = startPointScan;
+                break;
             }
-            startPointScanX = 0;
         }
-        if (first != null) {
+
+        if (first >= 0) {
             carveTile(first);
             notifyGenerationListener();
         }
     }
 
-    private void carveTile(Vector first) {
-        tiles[first.toArrayIndex(height)] = Map.HIGHLIGHT_TILE;
-        working.add(first);
-        highlight = first;
+    private void carveTile(int targetIndex) {
+        tiles[targetIndex] = Map.HIGHLIGHT_TILE;
+        working.add(targetIndex);
+        highlightIndex = targetIndex;
     }
 
     private void carveMaze(long updateDelay) {
@@ -102,17 +97,17 @@ public class GrowingTreeMaze extends BasicGenerator {
 
             Utils.maybeWait(this, updateDelay);
 
-            // Clear highlight.
-            if (highlight != null) {
-                tiles[highlight.toArrayIndex(height)] = Map.WORKING_TILE;
-                highlight = null;
+            // Clear highlightIndex.
+            if (highlightIndex >= 0) {
+                tiles[highlightIndex] = Map.WORKING_TILE;
+                highlightIndex = -1;
             }
 
-            Vector origin = getCarveOrigin();
-            Vector target = selectCarveTarget(origin);
+            Integer origin = working.get(working.size() - 1);
+            int target = selectCarveTarget(origin);
 
             // If we found a suitable target, carve it.
-            if (target != null) {
+            if (target >= 0) {
                 carveTile(target);
             }
 
@@ -120,18 +115,14 @@ public class GrowingTreeMaze extends BasicGenerator {
             else {
                 direction = null;
                 working.remove(origin);
-                tiles[origin.toArrayIndex(height)] = Map.WORKED_TILE;
+                tiles[origin] = Map.WORKED_TILE;
             }
 
             notifyGenerationListener();
         }
     }
 
-    private Vector getCarveOrigin() {
-        return working.get(working.size() - 1);
-    }
-
-    private Vector selectCarveTarget(Vector origin) {
+    private int selectCarveTarget(int origin) {
 
         // Check each cardinal neighbor (in random order) until a suitable target is found or all are checked.
         List<Direction> cardinals = Direction.getCardinals();
@@ -143,7 +134,7 @@ public class GrowingTreeMaze extends BasicGenerator {
             }
 
             // Select and validate the target chosen. If it's invalid, skip it.
-            Vector possibleTarget = origin.offsetBy(direction);
+            int possibleTarget = origin + direction.get2dIndexOffset(height);
             if (!isTargetValid(origin, possibleTarget)) {
                 direction = null;
                 continue;
@@ -151,33 +142,35 @@ public class GrowingTreeMaze extends BasicGenerator {
 
             return possibleTarget;
         }
-        return null;
+        return -1;
     }
 
-    private boolean isTargetValid(Vector origin, Vector target) {
+    private boolean isTargetValid(int origin, int target) {
 
         // Don't carve outside of allowed bounds.
-        if (!target.isInBounds(width, height, boundary)) {
+        if (!Utils.isInBounds(target, width, height, boundary)) {
             return false;
         }
 
         // Don't carve tiles that are already open.
-        if (tiles[target.toArrayIndex(height)] != Map.WALL_TILE) {
+        if (tiles[target] != Map.WALL_TILE) {
             return false;
         }
 
         if (direction != null) {
-            if (testForwardForSelf(target.toArrayIndex(height))) return false;
+            if (testForwardForSelf(target)) {
+                return false;
+            }
         }
         else {
-            List<Vector> openNearby = map.getMatchingOpenInRange(target, 2, minimumSpacing, Map.FINISHED_TILE, false);
-            if (openNearby.size() > 0) {
+            List<Integer> openNearby = map.getMatchingOpenInRange(target, 2, minimumSpacing, Map.FINISHED_TILE, false);
+            if (openNearby.size() > 1) {
                 return false;
             }
         }
 
-        List<Vector> openCards = map.getOpenNeighbors(target, Direction.getCardinals());
-        List<Vector> openDiags = map.getOpenNeighbors(target, Direction.getDiagonals());
+        List<Integer> openCards = map.getOpenNeighbors(target, Direction.getCardinals());
+        List<Integer> openDiags = map.getOpenNeighbors(target, Direction.getDiagonals());
 
         int oc = openCards.size();
         int od = openDiags.size();
@@ -186,7 +179,7 @@ public class GrowingTreeMaze extends BasicGenerator {
         boolean isDeadEnd = (oc == 1 && od <= 1); // The <=1 instead of ==0 allows turning of corners and T-junctions,
                                                   // but also results in most halls ending with little 'hooks'.
 
-        if (origin == null && !isIsolate) {
+        if (origin < 0 && !isIsolate) {
             return false;
         }
 
@@ -195,8 +188,8 @@ public class GrowingTreeMaze extends BasicGenerator {
         }
 
         // Ensure we're not creating diagonal connections to other open spaces.
-        for (Vector openDiag : openDiags) {
-            if (!openDiag.isCardinalAdjacent(origin)) {
+        for (int openDiag : openDiags) {
+            if (!Utils.isCardinalAdjacent(openDiag, origin, height)) {
                 return false;
             }
         }
