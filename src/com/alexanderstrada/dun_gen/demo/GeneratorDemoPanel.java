@@ -11,10 +11,11 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GeneratorDemoPanel extends JPanel implements GenerationListener {
 
-    private final java.util.Map<Integer, Color> colorCache = new HashMap<>();
+    private final Map<Integer, Color> colorCache = new HashMap<>();
 
     private final long updateDelay;
     private final int squareSize;

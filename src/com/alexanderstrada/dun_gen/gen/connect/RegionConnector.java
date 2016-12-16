@@ -7,11 +7,12 @@ import com.alexanderstrada.dun_gen.tile_map.TileMap;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class RegionConnector extends RegionColorizer {
 
-    private final java.util.Map<Integer, List<Integer>> regions = new HashMap<>();
+    private final Map<Integer, List<Integer>> regions = new HashMap<>();
 
     public RegionConnector(Random random) {
         super(random);

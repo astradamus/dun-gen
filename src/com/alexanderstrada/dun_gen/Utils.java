@@ -6,6 +6,7 @@ import com.alexanderstrada.dun_gen.tile_map.TileMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class Utils {
@@ -81,9 +82,9 @@ public class Utils {
         return i % height2d;
     }
 
-    public static java.util.Map<Integer, List<Integer>> getRegions(int[] tiles) {
+    public static Map<Integer, List<Integer>> getRegions(int[] tiles) {
 
-        final java.util.Map<Integer, List<Integer>> out = new HashMap<>();
+        final Map<Integer, List<Integer>> out = new HashMap<>();
 
         for (int i = 0; i < tiles.length; i++) {
             int identity = tiles[i];
