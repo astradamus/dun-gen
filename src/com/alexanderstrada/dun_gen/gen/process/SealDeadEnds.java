@@ -20,8 +20,8 @@ public class SealDeadEnds extends BasicGenerator {
     }
 
     @Override
-    public void apply(TileMap tileMap, long updateDelay) {
-        super.apply(tileMap, updateDelay);
+    public void apply(TileMap tileMap) {
+        super.apply(tileMap);
 
         while (true) {
             if (deadEnds.isEmpty()) {

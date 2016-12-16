@@ -63,7 +63,7 @@ public class Main {
         genSequence.add(new SealDeadEnds(random));
         genSequence.add(new SealSmallestRegions(random, 1));
 
-        JPanel panel = new GeneratorDemoPanel(genSequence, squareSize, mapWidth, mapHeight, updateDelay);
+        JPanel panel = new GeneratorDemoPanel(genSequence, updateDelay, squareSize, mapWidth, mapHeight);
         runDemo(squareSize, mapWidth, mapHeight, panel);
     }
 

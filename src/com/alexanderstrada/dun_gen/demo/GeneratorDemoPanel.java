@@ -16,15 +16,18 @@ public class GeneratorDemoPanel extends JPanel implements GenerationListener {
 
     private final java.util.Map<Integer, Color> colorCache = new HashMap<>();
 
-    private int squareSize;
+    private final long updateDelay;
+    private final int squareSize;
     private TileMap tileMap;
 
     public GeneratorDemoPanel(List<Generator> genSequence,
+                              long updateDelay,
                               int squareSize,
                               int mapWidth,
-                              int mapHeight,
-                              int updateDelay) {
+                              int mapHeight) {
+
         this.squareSize = squareSize;
+        this.updateDelay = updateDelay;
         setBackground(Color.BLACK);
 
         tileMap = new DefaultTileMap(mapWidth, mapHeight, 1, new int[mapWidth*mapHeight]);
@@ -33,12 +36,16 @@ public class GeneratorDemoPanel extends JPanel implements GenerationListener {
 
             for (Generator gen : genSequence) {
                 gen.setGenerationListener(this);
-                gen.apply(tileMap, updateDelay);
+                gen.apply(tileMap);
                 gen.setGenerationListener(null);
             }
         }).start();
     }
 
+    @Override
+    public long getUpdateDelay() {
+        return updateDelay;
+    }
 
     @Override
     public void notifyVisualizerMapUpdated() {

@@ -9,6 +9,8 @@ public abstract class BasicGenerator implements Generator {
     protected final Random random;
 
     private GenerationListener listener;
+    protected long updateDelay;
+
     protected TileMap tileMap;
     protected int width;
     protected int height;
@@ -29,7 +31,8 @@ public abstract class BasicGenerator implements Generator {
     }
 
     @Override
-    public void apply(TileMap tileMap, long updateDelay) {
+    public void apply(TileMap tileMap) {
+        updateDelay = listener == null ? 0 : listener.getUpdateDelay();
         this.tileMap = tileMap;
         width = tileMap.getWidth();
         height = tileMap.getHeight();

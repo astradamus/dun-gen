@@ -21,8 +21,8 @@ public class SealSmallestRegions extends BasicGenerator {
     }
 
     @Override
-    public void apply(TileMap tileMap, long updateDelay) {
-        super.apply(tileMap, updateDelay);
+    public void apply(TileMap tileMap) {
+        super.apply(tileMap);
 
         regions.clear();
         regions.putAll(Utils.getRegions(tiles));
