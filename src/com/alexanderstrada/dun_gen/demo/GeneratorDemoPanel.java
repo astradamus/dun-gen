@@ -1,8 +1,8 @@
 package com.alexanderstrada.dun_gen.demo;
 
 import com.alexanderstrada.dun_gen.Utils;
+import com.alexanderstrada.dun_gen.gen.DungeonFactory;
 import com.alexanderstrada.dun_gen.gen.GenerationListener;
-import com.alexanderstrada.dun_gen.gen.Generator;
 import com.alexanderstrada.dun_gen.tile_map.DefaultTileMap;
 import com.alexanderstrada.dun_gen.tile_map.TileMap;
 
@@ -10,7 +10,6 @@ import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class GeneratorDemoPanel extends JPanel implements GenerationListener {
@@ -21,8 +20,7 @@ public class GeneratorDemoPanel extends JPanel implements GenerationListener {
     private final int squareSize;
     private TileMap tileMap;
 
-    public GeneratorDemoPanel(List<Generator> genSequence,
-                              long updateDelay,
+    public GeneratorDemoPanel(long updateDelay,
                               int squareSize,
                               int mapWidth,
                               int mapHeight) {
@@ -33,14 +31,7 @@ public class GeneratorDemoPanel extends JPanel implements GenerationListener {
 
         tileMap = new DefaultTileMap(mapWidth, mapHeight, 1, new int[mapWidth*mapHeight]);
 
-        new Thread(() -> {
-
-            for (Generator gen : genSequence) {
-                gen.setGenerationListener(this);
-                gen.apply(tileMap);
-                gen.setGenerationListener(null);
-            }
-        }).start();
+        DungeonFactory.carveBasicDungeon(tileMap, 1, false, false, this);
     }
 
     @Override
