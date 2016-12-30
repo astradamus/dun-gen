@@ -145,13 +145,15 @@ public class ProportionalRooms extends BasicGenerator {
             // Carve the room.
             for (int y = 0; y < roomHeight; y++) {
                 for (int x = 0; x < roomWidth; x++) {
-                    int off = Utils.getArrayIndex(x, y, height);
-                    tiles[originI + off] = TileMap.FINISHED_TILE;
+                    int i = originI + Utils.getArrayIndex(x, y, height);
+                    if (tiles[i] == TileMap.WALL_TILE) {
+                        tiles[i] = TileMap.FINISHED_TILE;
+                        open--;
+                    }
                 }
             }
 
             rooms.add(room);
-            open -= (roomWidth * roomHeight);
             notifyGenerationListener();
         }
     }
