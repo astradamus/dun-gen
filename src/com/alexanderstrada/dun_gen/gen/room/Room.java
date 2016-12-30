@@ -14,13 +14,13 @@ public class Room {
     }
 
     int left() { return x; }
-    int right() { return x + width; }
+    int right() { return x + width - 1; }
     int top() { return y; }
-    int bottom() { return y + height; }
+    int bottom() { return y + height - 1; }
 
-    boolean intersects(Room room) {
-        boolean intersectsX = right() >= room.left() && room.right() >= left();
-        boolean intersectsY = bottom() >= room.top() && room.bottom() >= top();
+    boolean touches(Room room) {
+        boolean intersectsX = right() >= (room.left() - 1) && (room.right() + 1) >= left();
+        boolean intersectsY = bottom() >= (room.top() - 1) && (room.bottom() + 1) >= top();
         return intersectsX && intersectsY;
     }
 }

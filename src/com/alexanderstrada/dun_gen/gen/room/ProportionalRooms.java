@@ -17,7 +17,7 @@ public class ProportionalRooms extends BasicGenerator {
     private int maxRoomWidth;
     private int minRoomHeight;
     private int maxRoomHeight;
-    private boolean allowOverlap;
+    private boolean allowCompoundRooms;
 
     public ProportionalRooms(Random random) {
         super(random);
@@ -29,14 +29,14 @@ public class ProportionalRooms extends BasicGenerator {
                              int maxRoomWidth,
                              int minRoomHeight,
                              int maxRoomHeight,
-                             boolean allowOverlap) {
+                             boolean allowCompoundRooms) {
         super(random);
         this.roomDensity = roomDensity;
         this.minRoomWidth = minRoomWidth;
         this.minRoomHeight = minRoomHeight;
         this.maxRoomWidth = maxRoomWidth;
         this.maxRoomHeight = maxRoomHeight;
-        this.allowOverlap = allowOverlap;
+        this.allowCompoundRooms = allowCompoundRooms;
     }
 
     public double getRoomDensity() {
@@ -79,12 +79,12 @@ public class ProportionalRooms extends BasicGenerator {
         this.maxRoomHeight = maxRoomHeight;
     }
 
-    public boolean isAllowOverlap() {
-        return allowOverlap;
+    public boolean getAllowCompoundRooms() {
+        return allowCompoundRooms;
     }
 
-    public void setAllowOverlap(boolean allowOverlap) {
-        this.allowOverlap = allowOverlap;
+    public void setAllowCompoundRooms(boolean allowCompoundRooms) {
+        this.allowCompoundRooms = allowCompoundRooms;
     }
 
     @Override
@@ -108,9 +108,9 @@ public class ProportionalRooms extends BasicGenerator {
 
             Room room = new Room(originX, originY, roomWidth, roomHeight);
 
-            if (!allowOverlap) {
+            if (!allowCompoundRooms) {
                 for (Room compare : rooms) {
-                    if (compare.intersects(room)) {
+                    if (compare.touches(room)) {
                         open--; // Ensure we do not loop forever.
                         continue top;
                     }
