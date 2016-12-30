@@ -58,7 +58,7 @@ public class DungeonFactory {
     private static void clearMap(TileMap blankInputMap) {
         int[] tiles = blankInputMap.getTiles();
         for (int i = 0; i < tiles.length; i++) {
-            tiles[i] = TileMap.WALL_TILE;
+            tiles[i] = TileMap.TILE_WALL;
         }
     }
 

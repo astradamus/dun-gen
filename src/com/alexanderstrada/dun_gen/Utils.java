@@ -102,7 +102,7 @@ public class Utils {
 
     public static List<Integer> getOpenNeighbors(TileMap tileMap, int origin, List<Direction> directions) {
         List<Integer> out = new ArrayList<>();
-        List<Integer> openNeighbors = getMatchingNeighbors(tileMap, origin, directions, TileMap.WALL_TILE, false);
+        List<Integer> openNeighbors = getMatchingNeighbors(tileMap, origin, directions, TileMap.TILE_WALL, false);
         for (int openNeighbor : openNeighbors) {
             out.add(openNeighbor);
         }
@@ -163,7 +163,7 @@ public class Utils {
                 if (Utils.isInBounds(candidate, w, h, bound)) {
 
                     int tileValue = tiles[candidate];
-                    if (tileValue != TileMap.WALL_TILE) {
+                    if (tileValue != TileMap.TILE_WALL) {
 
                         boolean matchesValue = tileValue == valueToMatch;
                         if (matchesValue == matchIfEquals) {

@@ -117,8 +117,8 @@ public class ProportionalRooms extends BasicGenerator {
             for (int y = 0; y < roomHeight; y++) {
                 for (int x = 0; x < roomWidth; x++) {
                     int i = originI + Utils.getArrayIndex(x, y, height);
-                    if (tiles[i] == TileMap.WALL_TILE) {
-                        tiles[i] = TileMap.FINISHED_TILE;
+                    if (tiles[i] == TileMap.TILE_WALL) {
+                        tiles[i] = TileMap.TILE_FINISHED;
                         open--;
                     }
                 }
@@ -151,12 +151,12 @@ public class ProportionalRooms extends BasicGenerator {
 
                 int potentialDiagonalConnection = corner + out.get2dIndexOffset(height);
 
-                if (tiles[potentialDiagonalConnection] != TileMap.WALL_TILE) {
+                if (tiles[potentialDiagonalConnection] != TileMap.TILE_WALL) {
 
                     int leftI = corner + out.left().get2dIndexOffset(height);
                     int rightI = corner + out.right().get2dIndexOffset(height);
 
-                    if (tiles[leftI] == TileMap.WALL_TILE && tiles[rightI] == TileMap.WALL_TILE) {
+                    if (tiles[leftI] == TileMap.TILE_WALL && tiles[rightI] == TileMap.TILE_WALL) {
                         return false;
                     }
                 }

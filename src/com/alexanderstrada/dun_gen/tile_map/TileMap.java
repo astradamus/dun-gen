@@ -1,11 +1,11 @@
 package com.alexanderstrada.dun_gen.tile_map;
 
 public interface TileMap {
-    int HIGHLIGHT_TILE = -0xFF0000;
-    int WORKING_TILE = -0xFFFFFF;
-    int WORKED_TILE = -0x666666;
-    int FINISHED_TILE = -0x333333;
-    int WALL_TILE = 0x000000;
+    int TILE_HIGHLIGHT = -0xFF0000;
+    int TILE_WORKING = -0xFFFFFF;
+    int TILE_WORKED = -0x666666;
+    int TILE_FINISHED = -0x333333;
+    int TILE_WALL = 0x000000;
 
     int getWidth();
     int getHeight();

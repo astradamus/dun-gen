@@ -35,7 +35,7 @@ public class SealSmallestRegions extends BasicGenerator {
         for (int i = keepCount; i < sortedEntries.size(); i++) {
             java.util.Map.Entry<Integer, List<Integer>> entry = sortedEntries.get(i);
             for (int index : entry.getValue()) {
-                tiles[index] = TileMap.WALL_TILE;
+                tiles[index] = TileMap.TILE_WALL;
                 notifyGenerationListener();
                 Utils.maybeWait(this, updateDelay);
             }

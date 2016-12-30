@@ -42,7 +42,7 @@ public class RegionConnector extends RegionColorizer {
     private void placeConnections(long updateDelay) {
         for (int i = 0; i < tiles.length; i++) {
 
-            if (tiles[i] == TileMap.WALL_TILE) {
+            if (tiles[i] == TileMap.TILE_WALL) {
 
                 List<Integer> cardinalNeighbors = Utils.getOpenNeighbors(tileMap, i, Direction.getCardinals());
 

@@ -52,7 +52,7 @@ public class SealDeadEnds extends BasicGenerator {
 
     private void sealDeadEnds(long updateDelay) {
         for (int i : deadEnds) {
-            tiles[i] = TileMap.WALL_TILE;
+            tiles[i] = TileMap.TILE_WALL;
             notifyGenerationListener();
             Utils.maybeWait(this, updateDelay);
         }
@@ -60,7 +60,7 @@ public class SealDeadEnds extends BasicGenerator {
     }
 
     private void scanIndex(int i) {
-        if (tiles[i] != TileMap.WALL_TILE) {
+        if (tiles[i] != TileMap.TILE_WALL) {
             List<Integer> openNeighbors = Utils.getOpenNeighbors(tileMap, i, Direction.getCardinals());
             if (openNeighbors.size() <= 1) {
                 deadEnds.add(i);

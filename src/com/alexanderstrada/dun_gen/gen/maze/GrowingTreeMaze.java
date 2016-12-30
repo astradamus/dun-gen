@@ -85,7 +85,7 @@ public class GrowingTreeMaze extends BasicGenerator {
     }
 
     private void carveTile(int targetIndex) {
-        tiles[targetIndex] = TileMap.HIGHLIGHT_TILE;
+        tiles[targetIndex] = TileMap.TILE_HIGHLIGHT;
         working.add(targetIndex);
         highlightIndex = targetIndex;
     }
@@ -99,7 +99,7 @@ public class GrowingTreeMaze extends BasicGenerator {
 
             // Clear highlightIndex.
             if (highlightIndex >= 0) {
-                tiles[highlightIndex] = TileMap.WORKING_TILE;
+                tiles[highlightIndex] = TileMap.TILE_WORKING;
                 highlightIndex = -1;
             }
 
@@ -115,7 +115,7 @@ public class GrowingTreeMaze extends BasicGenerator {
             else {
                 direction = null;
                 working.remove(origin);
-                tiles[origin] = TileMap.WORKED_TILE;
+                tiles[origin] = TileMap.TILE_WORKED;
             }
 
             notifyGenerationListener();
@@ -153,7 +153,7 @@ public class GrowingTreeMaze extends BasicGenerator {
         }
 
         // Don't carve tiles that are already open.
-        if (tiles[target] != TileMap.WALL_TILE) {
+        if (tiles[target] != TileMap.TILE_WALL) {
             return false;
         }
 
@@ -164,7 +164,7 @@ public class GrowingTreeMaze extends BasicGenerator {
         }
         else {
             List<Integer> openNearby =
-                    Utils.getMatchingOpenInRange(tileMap, target, 2, minimumSpacing, TileMap.FINISHED_TILE, false);
+                    Utils.getMatchingOpenInRange(tileMap, target, 2, minimumSpacing, TileMap.TILE_FINISHED, false);
             if (openNearby.size() > 1) {
                 return false;
             }
@@ -248,7 +248,7 @@ public class GrowingTreeMaze extends BasicGenerator {
     private boolean testIndexIsSelf(int i) {
         if (Utils.isInBounds(i, width, height, boundary)) {
             int testValue = tiles[i];
-            if (testValue == TileMap.WORKED_TILE || testValue == TileMap.WORKING_TILE) {
+            if (testValue == TileMap.TILE_WORKED || testValue == TileMap.TILE_WORKING) {
                 return true;
             }
         }
@@ -257,8 +257,8 @@ public class GrowingTreeMaze extends BasicGenerator {
 
     private void finalizeTiles() {
         for (int i = 0; i < tiles.length; i++) {
-            if (tiles[i] == TileMap.WORKED_TILE) {
-                tiles[i] = TileMap.FINISHED_TILE;
+            if (tiles[i] == TileMap.TILE_WORKED) {
+                tiles[i] = TileMap.TILE_FINISHED;
             }
         }
         notifyGenerationListener();

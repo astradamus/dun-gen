@@ -23,7 +23,7 @@ public class RegionColorizer extends BasicGenerator {
 
         for (int i = 0; i < tiles.length; i++) {
 
-            if (tiles[i] == TileMap.FINISHED_TILE) {
+            if (tiles[i] == TileMap.TILE_FINISHED) {
                 working.clear();
 
                 setMember(i, i, updateDelay);
@@ -32,7 +32,7 @@ public class RegionColorizer extends BasicGenerator {
                     int origin = working.remove(0);
 
                     for (int neighbor : Utils.getOpenNeighbors(tileMap, origin, Direction.getAll())) {
-                        if (tiles[neighbor] == TileMap.FINISHED_TILE) {
+                        if (tiles[neighbor] == TileMap.TILE_FINISHED) {
                             setMember(neighbor, i, updateDelay);
                         }
                     }
