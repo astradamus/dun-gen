@@ -91,12 +91,11 @@ public class ProportionalRooms extends BasicGenerator {
     @Override
     public void apply(TileMap tileMap) {
         super.apply(tileMap);
-
         rooms.clear();
 
         int open = (int) (tiles.length * roomDensity);
 
-        top: while (open > 0) {
+        while (open > 0) {
             Utils.maybeWait(this, updateDelay);
 
             int roomWidth = Utils.randomIntInRange(random, minRoomWidth, maxRoomWidth);
@@ -109,37 +108,9 @@ public class ProportionalRooms extends BasicGenerator {
 
             Room room = new Room(originX, originY, roomWidth, roomHeight);
 
-            if (!allowCompoundRooms) {
-                for (Room compare : rooms) {
-                    if (compare.touches(room)) {
-                        open--; // Ensure we do not loop forever.
-                        continue top;
-                    }
-                }
-            }
-
-            // If compound rooms are allowed, reject diagonal connections.
-            else {
-                int[] corners = room.getCorners(height);
-                List<Direction> diagonals = Direction.getDiagonals();
-
-                for (int cI = 0; cI < corners.length; cI++) {
-                    int corner = corners[cI];
-                    Direction out = diagonals.get(cI);
-
-                    int potentialDiagonalConnection = corner + out.get2dIndexOffset(height);
-
-                    if (tiles[potentialDiagonalConnection] != TileMap.WALL_TILE) {
-
-                        int leftI = corner + out.left().get2dIndexOffset(height);
-                        int rightI = corner + out.right().get2dIndexOffset(height);
-
-                        if (tiles[leftI] == TileMap.WALL_TILE && tiles[rightI] == TileMap.WALL_TILE) {
-                            open--; // Ensure we do not loop forever.
-                            continue top;
-                        }
-                    }
-                }
+            if (!validateRoom(room)) {
+                open--; // Ensure we do not loop forever.
+                continue;
             }
 
             // Carve the room.
@@ -156,5 +127,42 @@ public class ProportionalRooms extends BasicGenerator {
             rooms.add(room);
             notifyGenerationListener();
         }
+    }
+
+    private boolean validateRoom(Room room) {
+
+        // If compound rooms are not allowed, reject this room if it creates one.
+        if (!allowCompoundRooms) {
+            for (Room compare : rooms) {
+                if (compare.touches(room)) {
+                    return false;
+                }
+            }
+        }
+
+        // If compound rooms are allowed, reject diagonal connections.
+        else {
+            int[] corners = room.getCorners(height);
+            List<Direction> diagonals = Direction.getDiagonals();
+
+            for (int cI = 0; cI < corners.length; cI++) {
+                int corner = corners[cI];
+                Direction out = diagonals.get(cI);
+
+                int potentialDiagonalConnection = corner + out.get2dIndexOffset(height);
+
+                if (tiles[potentialDiagonalConnection] != TileMap.WALL_TILE) {
+
+                    int leftI = corner + out.left().get2dIndexOffset(height);
+                    int rightI = corner + out.right().get2dIndexOffset(height);
+
+                    if (tiles[leftI] == TileMap.WALL_TILE && tiles[rightI] == TileMap.WALL_TILE) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 }
