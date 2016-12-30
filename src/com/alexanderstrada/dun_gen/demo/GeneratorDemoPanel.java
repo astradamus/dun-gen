@@ -29,7 +29,7 @@ public class GeneratorDemoPanel extends JPanel implements GenerationListener {
         this.updateDelay = updateDelay;
         setBackground(Color.BLACK);
 
-        tileMap = new DefaultTileMap(mapWidth, mapHeight, 1, new int[mapWidth*mapHeight]);
+        tileMap = DefaultTileMap.makeBlank(mapWidth, mapHeight, 1);
 
         DungeonFactory.carveBasicDungeon(tileMap, 1, false, false, this);
     }

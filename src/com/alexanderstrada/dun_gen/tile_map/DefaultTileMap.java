@@ -33,4 +33,8 @@ public class DefaultTileMap implements TileMap {
     public int[] getTiles() {
         return tiles;
     }
+
+    public static TileMap makeBlank(int width, int height, int boundary) {
+        return new DefaultTileMap(width, height, boundary, new int[width*height]);
+    }
 }
