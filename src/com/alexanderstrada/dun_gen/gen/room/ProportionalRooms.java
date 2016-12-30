@@ -2,6 +2,7 @@ package com.alexanderstrada.dun_gen.gen.room;
 
 import com.alexanderstrada.dun_gen.Utils;
 import com.alexanderstrada.dun_gen.gen.BasicGenerator;
+import com.alexanderstrada.dun_gen.tile_map.Direction;
 import com.alexanderstrada.dun_gen.tile_map.TileMap;
 
 import java.util.ArrayList;
@@ -113,6 +114,30 @@ public class ProportionalRooms extends BasicGenerator {
                     if (compare.touches(room)) {
                         open--; // Ensure we do not loop forever.
                         continue top;
+                    }
+                }
+            }
+
+            // If compound rooms are allowed, reject diagonal connections.
+            else {
+                int[] corners = room.getCorners(height);
+                List<Direction> diagonals = Direction.getDiagonals();
+
+                for (int cI = 0; cI < corners.length; cI++) {
+                    int corner = corners[cI];
+                    Direction out = diagonals.get(cI);
+
+                    int potentialDiagonalConnection = corner + out.get2dIndexOffset(height);
+
+                    if (tiles[potentialDiagonalConnection] != TileMap.WALL_TILE) {
+
+                        int leftI = corner + out.left().get2dIndexOffset(height);
+                        int rightI = corner + out.right().get2dIndexOffset(height);
+
+                        if (tiles[leftI] == TileMap.WALL_TILE && tiles[rightI] == TileMap.WALL_TILE) {
+                            open--; // Ensure we do not loop forever.
+                            continue top;
+                        }
                     }
                 }
             }
