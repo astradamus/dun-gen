@@ -30,6 +30,10 @@ public abstract class BasicGenerator implements Generator {
         if (listener != null) listener.notifyVisualizerMapUpdated();
     }
 
+    protected void notifyGenerationListenerShowLayer(int layerId) {
+        if (listener != null) listener.notifyVisualizerShowLayer(layerId);
+    }
+
     @Override
     public void apply(TileMap tileMap) {
         updateDelay = listener == null ? 0 : listener.getUpdateDelay();

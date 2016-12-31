@@ -19,6 +19,7 @@ public class GeneratorDemoPanel extends JPanel implements GenerationListener {
     private final long updateDelay;
     private final int squareSize;
     private TileMap tileMap;
+    private int displayLayer = 0;
 
     public GeneratorDemoPanel(long updateDelay,
                               int squareSize,
@@ -45,15 +46,22 @@ public class GeneratorDemoPanel extends JPanel implements GenerationListener {
     }
 
     @Override
+    public void notifyVisualizerShowLayer(int layerId) {
+        displayLayer = layerId;
+        repaint();
+    }
+
+    @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
         g.clearRect(0, 0, getWidth(), getHeight());
         if (tileMap != null) {
+            int[] colorData = tileMap.getLayer(displayLayer);
 
             for (int y = 0; y < tileMap.getHeight(); y++) {
                 for (int x = 0; x < tileMap.getWidth(); x++) {
-                    int value = tileMap.getLayer(TileMap.LAYER_TILES)[Utils.getArrayIndex(x, y, tileMap.getHeight())];
+                    int value = colorData[Utils.getArrayIndex(x, y, tileMap.getHeight())];
                     int rgb = Math.abs(value);
 
                     Color color = colorCache.get(rgb);
