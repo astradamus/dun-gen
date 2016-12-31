@@ -53,7 +53,7 @@ public class GeneratorDemoPanel extends JPanel implements GenerationListener {
 
             for (int y = 0; y < tileMap.getHeight(); y++) {
                 for (int x = 0; x < tileMap.getWidth(); x++) {
-                    int value = tileMap.getTiles()[Utils.getArrayIndex(x, y, tileMap.getHeight())];
+                    int value = tileMap.getLayer(TileMap.LAYER_TILES)[Utils.getArrayIndex(x, y, tileMap.getHeight())];
                     int rgb = Math.abs(value);
 
                     Color color = colorCache.get(rgb);

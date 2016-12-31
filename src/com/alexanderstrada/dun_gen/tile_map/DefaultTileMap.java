@@ -5,13 +5,13 @@ public class DefaultTileMap implements TileMap {
     private final int width;
     private final int height;
     private final int boundary;
-    private final int[] tiles;
+    private final int[][] layers;
 
-    public DefaultTileMap(int width, int height, int boundary, int[] tiles) {
+    public DefaultTileMap(int width, int height, int boundary, int[][] layers) {
         this.width = width;
         this.height = height;
         this.boundary = boundary;
-        this.tiles = tiles;
+        this.layers = layers;
     }
 
     @Override
@@ -30,11 +30,13 @@ public class DefaultTileMap implements TileMap {
     }
 
     @Override
-    public int[] getTiles() {
-        return tiles;
+    public int[] getLayer(int layerId) {
+        return layers[layerId];
     }
 
     public static TileMap makeBlank(int width, int height, int boundary) {
-        return new DefaultTileMap(width, height, boundary, new int[width*height]);
+        int[][] layers = new int[1][];
+        layers[TileMap.LAYER_TILES] = new int[width*height];
+        return new DefaultTileMap(width, height, boundary, layers);
     }
 }

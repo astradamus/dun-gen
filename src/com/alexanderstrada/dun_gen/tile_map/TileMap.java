@@ -7,8 +7,10 @@ public interface TileMap {
     int TILE_FINISHED = -0x333333;
     int TILE_WALL = 0x000000;
 
+    int LAYER_TILES = 0;
+
     int getWidth();
     int getHeight();
     int getBoundary();
-    int[] getTiles();
+    int[] getLayer(int layerId);
 }

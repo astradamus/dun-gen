@@ -37,6 +37,6 @@ public abstract class BasicGenerator implements Generator {
         width = tileMap.getWidth();
         height = tileMap.getHeight();
         boundary = tileMap.getBoundary();
-        tiles = tileMap.getTiles();
+        tiles = tileMap.getLayer(TileMap.LAYER_TILES);
     }
 }

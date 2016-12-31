@@ -118,7 +118,7 @@ public class Utils {
         int w = tileMap.getWidth();
         int h = tileMap.getHeight();
         int bound = tileMap.getBoundary();
-        int[] tiles = tileMap.getTiles();
+        int[] tiles = tileMap.getLayer(TileMap.LAYER_TILES);
 
         List<Integer> matches = new ArrayList<>();
 
@@ -152,7 +152,7 @@ public class Utils {
         int w = tileMap.getWidth();
         int h = tileMap.getHeight();
         int bound = tileMap.getBoundary();
-        int[] tiles = tileMap.getTiles();
+        int[] tiles = tileMap.getLayer(TileMap.LAYER_TILES);
 
         List<Integer> matchesInRange = new ArrayList<>();
         for (int y = -maxDistance; y <= maxDistance; y++) {
