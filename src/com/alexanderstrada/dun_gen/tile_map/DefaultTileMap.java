@@ -30,13 +30,18 @@ public class DefaultTileMap implements TileMap {
     }
 
     @Override
+    public int[][] getLayers() {
+        return layers;
+    }
+
+    @Override
     public int[] getLayer(int layerId) {
         return layers[layerId];
     }
 
     public static TileMap makeBlank(int width, int height, int boundary) {
         int[][] layers = new int[1][];
-        layers[TileMap.LAYER_TILES] = new int[width*height];
+        layers[Layer.TILES.id] = new int[width*height];
         return new DefaultTileMap(width, height, boundary, layers);
     }
 }
