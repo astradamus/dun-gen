@@ -40,8 +40,10 @@ public class DefaultTileMap implements TileMap {
     }
 
     public static TileMap makeBlank(int width, int height, int boundary) {
-        int[][] layers = new int[1][];
-        layers[Layer.TILES.id] = new int[width*height];
+        int[][] layers = new int[TileMap.Layer.values().length][];
+        for (Layer layer : Layer.values()) {
+            layers[layer.id] = new int[width*height];
+        }
         return new DefaultTileMap(width, height, boundary, layers);
     }
 }

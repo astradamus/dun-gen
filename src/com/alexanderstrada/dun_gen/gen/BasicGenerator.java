@@ -16,6 +16,7 @@ public abstract class BasicGenerator implements Generator {
     protected int height;
     protected int boundary;
     protected int[] tiles;
+    protected int[] regions;
     protected int[][] layers;
 
     public BasicGenerator(Random random) {
@@ -43,6 +44,7 @@ public abstract class BasicGenerator implements Generator {
         height = tileMap.getHeight();
         boundary = tileMap.getBoundary();
         tiles = tileMap.getLayer(TileMap.Layer.TILES.id);
+        regions = tileMap.getLayer(TileMap.Layer.REGIONS.id);
         layers = tileMap.getLayers();
     }
 }

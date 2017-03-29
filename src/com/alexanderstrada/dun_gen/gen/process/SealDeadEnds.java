@@ -53,6 +53,7 @@ public class SealDeadEnds extends BasicGenerator {
     private void sealDeadEnds(long updateDelay) {
         for (int i : deadEnds) {
             tiles[i] = TileMap.TILE_WALL;
+            regions[i] = -1;
             notifyGenerationListener();
             Utils.maybeWait(this, updateDelay);
         }

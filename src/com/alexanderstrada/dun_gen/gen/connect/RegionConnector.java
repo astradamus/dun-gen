@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class RegionConnector extends RegionColorizer {
 
-    private final Map<Integer, List<Integer>> regions = new HashMap<>();
+    private final Map<Integer, List<Integer>> regionsMap = new HashMap<>();
 
     public RegionConnector(Random random) {
         super(random);
@@ -21,22 +21,24 @@ public class RegionConnector extends RegionColorizer {
     @Override
     public void apply(TileMap tileMap) {
         super.apply(tileMap);
-
-        regions.clear();
-        regions.putAll(Utils.getRegions(tiles));
+        notifyGenerationListenerShowLayer(TileMap.Layer.REGIONS.id);
+        regionsMap.clear();
+        regionsMap.putAll(Utils.getRegions(regions));
 
         int repeats = 0;
         int lastSize = -1;
         while (repeats < 10) {
-            if (regions.size() == lastSize) {
+            if (regionsMap.size() == lastSize) {
                 repeats++;
             }
             else {
                 repeats = 0;
-                lastSize = regions.size();
+                lastSize = regionsMap.size();
             }
             placeConnections(updateDelay);
         }
+
+        notifyGenerationListenerShowLayer(TileMap.Layer.TILES.id);
     }
 
     private void placeConnections(long updateDelay) {
@@ -58,8 +60,8 @@ public class RegionConnector extends RegionColorizer {
                     // Only make connections at 180 degrees.
                     if (n1x == n2x || n1y == n2y) {
 
-                        int neighbor1Id = tiles[neighbor1];
-                        int neighbor2Id = tiles[neighbor2];
+                        int neighbor1Id = regions[neighbor1];
+                        int neighbor2Id = regions[neighbor2];
 
                         if (neighbor1Id != neighbor2Id && random.nextDouble() < 0.10) {
                             mergeRegions(i, neighbor1Id, neighbor2Id, updateDelay);
@@ -72,18 +74,19 @@ public class RegionConnector extends RegionColorizer {
 
     private void mergeRegions(int connectionIndex, int keepRegionId, int consumeRegionId, long updateDelay) {
 
-        List<Integer> keepMembers = regions.get(keepRegionId);
+        List<Integer> keepMembers = regionsMap.get(keepRegionId);
 
         // Add the connection to the kept region.
-        tiles[connectionIndex] = keepRegionId;
+        tiles[connectionIndex] = TileMap.TILE_FINISHED;
+        regions[connectionIndex] = keepRegionId;
         keepMembers.add(connectionIndex);
 
         // Add all consumed members to the kept region, update them on the tileMap.
-        for (int consumeMember : regions.get(consumeRegionId)) {
-            tiles[consumeMember] = keepRegionId;
+        for (int consumeMember : regionsMap.get(consumeRegionId)) {
+            regions[consumeMember] = keepRegionId;
             keepMembers.add(consumeMember);
         }
-        regions.remove(consumeRegionId);
+        regionsMap.remove(consumeRegionId);
 
         notifyGenerationListener();
         Utils.maybeWait(this, updateDelay);

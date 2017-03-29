@@ -8,8 +8,8 @@ public interface TileMap {
     int TILE_WALL = 0x000000;
 
     enum Layer {
-
-        TILES(0);
+        TILES(0),
+        REGIONS(1);
 
         public final int id;
 

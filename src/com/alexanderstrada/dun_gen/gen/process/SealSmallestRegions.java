@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class SealSmallestRegions extends BasicGenerator {
 
-    private final Map<Integer, List<Integer>> regions = new HashMap<>();
+    private final Map<Integer, List<Integer>> regionsMap = new HashMap<>();
 
     private final int maximumRegions;
 
@@ -24,9 +24,9 @@ public class SealSmallestRegions extends BasicGenerator {
     @Override
     public void apply(TileMap tileMap) {
         super.apply(tileMap);
-
-        regions.clear();
-        regions.putAll(Utils.getRegions(tiles));
+        notifyGenerationListenerShowLayer(TileMap.Layer.REGIONS.id);
+        regionsMap.clear();
+        regionsMap.putAll(Utils.getRegions(regions));
 
         List<java.util.Map.Entry<Integer, List<Integer>>> sortedEntries = getSortedEntries();
 
@@ -35,17 +35,17 @@ public class SealSmallestRegions extends BasicGenerator {
         for (int i = keepCount; i < sortedEntries.size(); i++) {
             java.util.Map.Entry<Integer, List<Integer>> entry = sortedEntries.get(i);
             for (int index : entry.getValue()) {
-                tiles[index] = TileMap.TILE_WALL;
-                notifyGenerationListener();
-                Utils.maybeWait(this, updateDelay);
+                seal(index);
             }
-            regions.remove(entry.getKey());
+            regionsMap.remove(entry.getKey());
         }
+
+        notifyGenerationListenerShowLayer(TileMap.Layer.TILES.id);
     }
 
     private List<java.util.Map.Entry<Integer, List<Integer>>> getSortedEntries() {
         List<java.util.Map.Entry<Integer, List<Integer>>> sortedEntries = new ArrayList<>();
-        List<java.util.Map.Entry<Integer, List<Integer>>> unsortedEntries = new ArrayList<>(regions.entrySet());
+        List<java.util.Map.Entry<Integer, List<Integer>>> unsortedEntries = new ArrayList<>(regionsMap.entrySet());
 
         for (java.util.Map.Entry<Integer, List<Integer>> sorting : unsortedEntries) {
 
@@ -61,5 +61,12 @@ public class SealSmallestRegions extends BasicGenerator {
             if (!placed) sortedEntries.add(sorting);
         }
         return sortedEntries;
+    }
+
+    private void seal(int index) {
+        tiles[index] = TileMap.TILE_WALL;
+        regions[index] = -1;
+        notifyGenerationListener();
+        Utils.maybeWait(this, updateDelay);
     }
 }
