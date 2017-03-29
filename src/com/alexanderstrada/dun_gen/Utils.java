@@ -88,7 +88,7 @@ public class Utils {
 
         for (int i = 0; i < tiles.length; i++) {
             int identity = tiles[i];
-            if (identity <= 0) continue;
+            if (identity < 0) continue;
 
             if (!out.containsKey(identity)) {
                 out.put(identity, new ArrayList<>());
