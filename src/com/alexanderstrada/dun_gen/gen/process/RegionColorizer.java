@@ -52,7 +52,7 @@ public class RegionColorizer extends BasicGenerator {
     }
 
     private boolean isOpenAndUnassigned(int i) {
-        return regions[i] == -1 && tiles[i] == TileMap.TILE_FINISHED;
+        return regions[i] == -1 && tiles[i] != TileMap.TILE_WALL;
     }
 
     private void setMember(int newMember, int regionId, long updateDelay) {

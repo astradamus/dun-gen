@@ -263,7 +263,7 @@ public class GrowingTreeMaze extends BasicGenerator {
     private void finalizeTiles() {
         for (int i = 0; i < tiles.length; i++) {
             if (tiles[i] == TileMap.TILE_WORKED) {
-                tiles[i] = TileMap.TILE_FINISHED;
+                tiles[i] = TileMap.TILE_HALL;
             }
         }
         notifyGenerationListener();

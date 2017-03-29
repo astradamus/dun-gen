@@ -118,7 +118,7 @@ public class ProportionalRooms extends BasicGenerator {
                 for (int x = 0; x < roomWidth; x++) {
                     int i = originI + Utils.getArrayIndex(x, y, height);
                     if (tiles[i] == TileMap.TILE_WALL) {
-                        tiles[i] = TileMap.TILE_FINISHED;
+                        tiles[i] = TileMap.TILE_ROOM;
                         open--;
                     }
                 }

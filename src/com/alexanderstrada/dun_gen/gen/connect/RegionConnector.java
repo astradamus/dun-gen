@@ -77,7 +77,7 @@ public class RegionConnector extends RegionColorizer {
         List<Integer> keepMembers = regionsMap.get(keepRegionId);
 
         // Add the connection to the kept region.
-        tiles[connectionIndex] = TileMap.TILE_FINISHED;
+        tiles[connectionIndex] = TileMap.TILE_LINK;
         regions[connectionIndex] = keepRegionId;
         keepMembers.add(connectionIndex);
 
