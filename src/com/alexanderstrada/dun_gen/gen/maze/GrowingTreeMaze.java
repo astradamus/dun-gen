@@ -157,17 +157,12 @@ public class GrowingTreeMaze extends BasicGenerator {
             return false;
         }
 
-        if (direction != null) {
-            if (testForwardForSelf(target)) {
-                return false;
-            }
+        // Don't carve tiles that violate minimum spacing.
+        if (direction == null) {
+            if (testSurroundingsForSelf(target)) return false;
         }
         else {
-            List<Integer> openNearby =
-                    Utils.getMatchingOpenInRange(tileMap, target, 2, minimumSpacing, TileMap.TILE_FINISHED, false);
-            if (openNearby.size() > 1) {
-                return false;
-            }
+            if (testForwardForSelf(target)) return false;
         }
 
         List<Integer> openCards = Utils.getOpenNeighbors(tileMap, target, Direction.getCardinals());
@@ -242,6 +237,16 @@ public class GrowingTreeMaze extends BasicGenerator {
             }
         }
 
+        return false;
+    }
+
+    private boolean testSurroundingsForSelf(int target) {
+        List<Integer> openNearby = Utils.getOpenInRange(tileMap, target, 2, minimumSpacing);
+        for (int candidate : openNearby) {
+            if (testIndexIsSelf(candidate)) {
+                return true;
+            }
+        }
         return false;
     }
 

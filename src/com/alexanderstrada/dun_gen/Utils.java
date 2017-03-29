@@ -137,42 +137,31 @@ public class Utils {
         return matches;
     }
 
-    /**
-     * Returns a list of all in-bounds indices in the given range that satisfy the given predicate. The predicate is
-     * defined as follows: if {@code matchIfEquals} is {@code true}, then an index is included if the tile it represents
-     * is equal to {@code valueToMatch}; however, if {@code matchIfEquals} is {@code false}, then an index is included
-     * if the tile it represents is NOT equal to {@code valueToMatch}.
-     */
-    public static List<Integer> getMatchingOpenInRange(TileMap tileMap, int origin,
-                                                       int minDistance,
-                                                       int maxDistance,
-                                                       int valueToMatch,
-                                                       boolean matchIfEquals) {
+    public static List<Integer> getOpenInRange(TileMap tileMap,
+                                               int origin,
+                                               int minDistance,
+                                               int maxDistance) {
 
         int w = tileMap.getWidth();
         int h = tileMap.getHeight();
         int bound = tileMap.getBoundary();
         int[] tiles = tileMap.getLayer(TileMap.Layer.TILES.id);
 
-        List<Integer> matchesInRange = new ArrayList<>();
+        List<Integer> openInRange = new ArrayList<>();
         for (int y = -maxDistance; y <= maxDistance; y++) {
             for (int x = -maxDistance; x <= maxDistance; x++) {
                 final int candidate = origin + Utils.getArrayIndex(x, y, h);
-                if (Utils.getDistance(candidate, origin, h) < minDistance) continue;
 
-                if (Utils.isInBounds(candidate, w, h, bound)) {
+                final boolean violatesMinimumDistance = Utils.getDistance(candidate, origin, h) < minDistance;
+                final boolean violatesTileMapBounds = !Utils.isInBounds(candidate, w, h, bound);
 
-                    int tileValue = tiles[candidate];
-                    if (tileValue != TileMap.TILE_WALL) {
+                if (violatesMinimumDistance || violatesTileMapBounds) continue;
 
-                        boolean matchesValue = tileValue == valueToMatch;
-                        if (matchesValue == matchIfEquals) {
-                            matchesInRange.add(candidate);
-                        }
-                    }
+                if (tiles[candidate] != TileMap.TILE_WALL) {
+                    openInRange.add(candidate);
                 }
             }
         }
-        return matchesInRange;
+        return openInRange;
     }
 }
