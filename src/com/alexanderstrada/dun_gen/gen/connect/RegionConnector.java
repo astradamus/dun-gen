@@ -63,7 +63,10 @@ public class RegionConnector extends RegionColorizer {
                         int neighbor1Id = regions[neighbor1];
                         int neighbor2Id = regions[neighbor2];
 
-                        if (neighbor1Id != neighbor2Id && random.nextDouble() < 0.10) {
+                        boolean neitherIsLink =
+                                neighbor1Id != TileMap.TILE_LINK && neighbor2Id != TileMap.TILE_LINK;
+
+                        if (neitherIsLink && neighbor1Id != neighbor2Id && random.nextDouble() < 0.10) {
                             mergeRegions(i, neighbor1Id, neighbor2Id, updateDelay);
                         }
                     }
