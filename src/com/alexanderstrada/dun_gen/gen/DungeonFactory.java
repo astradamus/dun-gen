@@ -1,5 +1,6 @@
 package com.alexanderstrada.dun_gen.gen;
 
+import com.alexanderstrada.dun_gen.gen.connect.RandomConnector;
 import com.alexanderstrada.dun_gen.gen.connect.RegionConnector;
 import com.alexanderstrada.dun_gen.gen.maze.GrowingTreeMaze;
 import com.alexanderstrada.dun_gen.gen.process.RegionColorizer;
@@ -17,6 +18,7 @@ public class DungeonFactory {
                                          int maxRegionCount,
                                          boolean roomsCanOverlap,
                                          boolean roomsMoreDense,
+                                         boolean simplyConnected,
                                          GenerationListener listener) {
 
         clearMap(inputMap);
@@ -47,6 +49,7 @@ public class DungeonFactory {
         // 3. Connect hallways/rooms.
         seq.add(new RegionColorizer(random));
         seq.add(new RegionConnector(random));
+        if (!simplyConnected) seq.add(new RandomConnector(random, 0.08));
 
         // 4. Seal dead ends.
         seq.add(new SealDeadEnds(random));

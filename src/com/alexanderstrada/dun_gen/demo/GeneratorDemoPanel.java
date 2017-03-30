@@ -32,7 +32,7 @@ public class GeneratorDemoPanel extends JPanel implements GenerationListener {
 
         tileMap = DefaultTileMap.makeBlank(mapWidth, mapHeight, 1);
 
-        DungeonFactory.carveBasicDungeon(tileMap, 1, false, false, this);
+        DungeonFactory.carveBasicDungeon(tileMap, 1, false, false, false, this);
     }
 
     @Override
