@@ -91,7 +91,7 @@ public class Utils {
             if (identity < 0) continue;
 
             if (!out.containsKey(identity)) {
-                out.put(identity, new ArrayList<>());
+                out.put(identity, new ArrayList<Integer>());
             }
 
             out.get(identity).add(i);

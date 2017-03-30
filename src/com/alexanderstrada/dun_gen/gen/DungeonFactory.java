@@ -67,14 +67,17 @@ public class DungeonFactory {
         }
     }
 
-    private static void executeGeneratorSequence(TileMap tileMap,
-                                                 ArrayList<Generator> seq,
-                                                 GenerationListener listener) {
-        new Thread(() -> {
-            for (Generator gen : seq) {
-                gen.setGenerationListener(listener);
-                gen.apply(tileMap);
-                gen.setGenerationListener(null);
+    private static void executeGeneratorSequence(final TileMap tileMap,
+                                                 final ArrayList<Generator> seq,
+                                                 final GenerationListener listener) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (Generator gen : seq) {
+                    gen.setGenerationListener(listener);
+                    gen.apply(tileMap);
+                    gen.setGenerationListener(null);
+                }
             }
         }).start();
     }
