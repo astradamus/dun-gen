@@ -14,6 +14,17 @@ public class DefaultTileMap implements TileMap {
         this.layers = layers;
     }
 
+    public DefaultTileMap(int width, int height, int boundary) {
+        this.width = width;
+        this.height = height;
+        this.boundary = boundary;
+
+        this.layers = new int[TileMap.Layer.values().length][];
+        for (Layer layer : Layer.values()) {
+            layers[layer.id] = new int[width*height];
+        }
+    }
+
     @Override
     public int getWidth() {
         return width;
@@ -37,13 +48,5 @@ public class DefaultTileMap implements TileMap {
     @Override
     public int[] getLayer(int layerId) {
         return layers[layerId];
-    }
-
-    public static TileMap makeBlank(int width, int height, int boundary) {
-        int[][] layers = new int[TileMap.Layer.values().length][];
-        for (Layer layer : Layer.values()) {
-            layers[layer.id] = new int[width*height];
-        }
-        return new DefaultTileMap(width, height, boundary, layers);
     }
 }
