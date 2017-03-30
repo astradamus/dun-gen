@@ -2,6 +2,7 @@ package com.alexanderstrada.dun_gen.gen;
 
 import com.alexanderstrada.dun_gen.gen.connect.RegionConnector;
 import com.alexanderstrada.dun_gen.gen.maze.GrowingTreeMaze;
+import com.alexanderstrada.dun_gen.gen.process.RegionColorizer;
 import com.alexanderstrada.dun_gen.gen.process.SealDeadEnds;
 import com.alexanderstrada.dun_gen.gen.process.SealSmallestRegions;
 import com.alexanderstrada.dun_gen.gen.room.ProportionalRooms;
@@ -44,6 +45,7 @@ public class DungeonFactory {
         seq.add(new GrowingTreeMaze(random, 0.05, minimumSpacing, 5));
 
         // 3. Connect hallways/rooms.
+        seq.add(new RegionColorizer(random));
         seq.add(new RegionConnector(random));
 
         // 4. Seal dead ends.

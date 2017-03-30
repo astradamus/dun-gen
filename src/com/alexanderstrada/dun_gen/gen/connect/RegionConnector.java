@@ -1,7 +1,7 @@
 package com.alexanderstrada.dun_gen.gen.connect;
 
 import com.alexanderstrada.dun_gen.Utils;
-import com.alexanderstrada.dun_gen.gen.process.RegionColorizer;
+import com.alexanderstrada.dun_gen.gen.BasicGenerator;
 import com.alexanderstrada.dun_gen.tile_map.Direction;
 import com.alexanderstrada.dun_gen.tile_map.TileMap;
 
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public class RegionConnector extends RegionColorizer {
+public class RegionConnector extends BasicGenerator {
 
     private final Map<Integer, List<Integer>> regionsMap = new HashMap<>();
 
