@@ -23,22 +23,26 @@ public class RegionColorizer extends BasicGenerator {
         notifyGenerationListenerShowLayer(TileMap.Layer.REGIONS.id);
         clearRegionsLayer();
 
+        final long modifiedDelay = updateDelay * 10;
+
         for (int i = 0; i < tiles.length; i++) {
 
             if (isOpenAndUnassigned(i)) {
                 working.clear();
 
-                setMember(i, i, updateDelay);
+                setMember(i, i);
 
                 while (!working.isEmpty()) {
                     int origin = working.remove(0);
 
                     for (int neighbor : Utils.getOpenNeighbors(tileMap, origin, Direction.getAll())) {
                         if (isOpenAndUnassigned(neighbor)) {
-                            setMember(neighbor, i, updateDelay);
+                            setMember(neighbor, i);
                         }
                     }
                 }
+
+                Utils.maybeWait(this, modifiedDelay);
             }
         }
 
@@ -55,10 +59,9 @@ public class RegionColorizer extends BasicGenerator {
         return regions[i] == -1 && tiles[i] != TileMap.TILE_WALL;
     }
 
-    private void setMember(int newMember, int regionId, long updateDelay) {
+    private void setMember(int newMember, int regionId) {
         regions[newMember] = regionId;
         notifyGenerationListener();
         working.add(newMember);
-        Utils.maybeWait(this, updateDelay);
     }
 }
