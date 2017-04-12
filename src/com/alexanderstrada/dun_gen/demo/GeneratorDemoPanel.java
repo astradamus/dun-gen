@@ -46,6 +46,11 @@ public class GeneratorDemoPanel extends JPanel implements GenerationListener {
     }
 
     @Override
+    public void onGenerationComplete() {
+        // Do nothing.
+    }
+
+    @Override
     public void notifyVisualizerShowLayer(int layerId) {
         displayLayer = layerId;
         repaint();

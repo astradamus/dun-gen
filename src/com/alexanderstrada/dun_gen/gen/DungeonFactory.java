@@ -78,6 +78,9 @@ public class DungeonFactory {
                     gen.apply(tileMap);
                     gen.setGenerationListener(null);
                 }
+                if (listener != null) {
+                    listener.onGenerationComplete();
+                }
             }
         }).start();
     }
